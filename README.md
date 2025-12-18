@@ -56,14 +56,22 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 - Java 21+
 - Maven 3.6+
 
-### Maven依赖
+### Maven 依赖
 
 ```xml
 <dependency>
     <groupId>com.g2rain</groupId>
     <artifactId>g2rain-common</artifactId>
-    <version>0.1.1</version>
+    <version>1.0.0</version>
 </dependency>
+```
+
+### Gradle 依赖
+
+```groovy
+dependencies {
+    implementation "com.g2rain:g2rain-common:1.0.0"
+}
 ```
 
 ### 基本使用
@@ -208,9 +216,9 @@ mvn package
 
 ## 📞 联系我们
 
-- **Issues**: [GitHub Issues](https://github.com/g2rain/g2rain-common/issues)
-- **讨论**: [GitHub Discussions](https://github.com/g2rain/g2rain-common/discussions)
-- **邮箱**: support@g2rain.com
+- **Issues**: [GitHub Issues](https://github.com/g2rain/g2rain/issues)
+- **讨论**: [GitHub Discussions](https://github.com/g2rain/g2rain/discussions)
+- **邮箱**: g2rain_developer@163.com
 
 ## 🙏 致谢
 

@@ -6,7 +6,7 @@
 
     <groupId>com.g2rain</groupId>
     <artifactId>g2rain-common</artifactId>
-    <version>0.1.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>G2rain Common</name>
@@ -16,6 +16,13 @@
         Provides common utility functions, constants, base data models, and unified exception handling.
         Aims to improve development efficiency and maintain code consistency.
     </description>
+
+    <scm>
+        <url>https://github.com/g2rain/g2rain-common</url>
+        <connection>scm:git:https://github.com/g2rain/g2rain-common.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/g2rain/g2rain-common.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
@@ -45,6 +52,17 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <jackson.databind.version>3.0.2</jackson.databind.version>
         <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
@@ -62,7 +80,10 @@
         <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
         <flatten.maven.plugin.version>1.7.3</flatten.maven.plugin.version>
+        <maven.gpg.plugin.version>3.2.7</maven.gpg.plugin.version>
+        <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
         <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -307,6 +328,48 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- GPG 签名插件：为发布到 Maven Central 的构件进行签名 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Nexus Staging 插件：自动将构件上传到 Sonatype OSSRH 并发布到 Maven Central -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus.staging.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- 发布到 Maven Central 时使用的 profile，可以通过 -P release 启用 -->
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+        </profile>
+    </profiles>
 </project>
