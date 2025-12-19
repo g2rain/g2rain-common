@@ -21,10 +21,35 @@ jobs:
           distribution: temurin
           java-version: "21"
           cache: maven
-          # 自动配置 Maven settings.xml
-          server-id: ossrh
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password: ${{ secrets.OSSRH_PASSWORD }}
+
+      - name: Configure Maven settings
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        run: |
+          mkdir -p ~/.m2
+          # 创建 settings.xml，使用明文密码（CI 环境安全）
+          cat > ~/.m2/settings.xml << EOF
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                                        https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <servers>
+              <server>
+                <id>ossrh</id>
+                <username>${OSSRH_USERNAME}</username>
+                <password>${OSSRH_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+          # 创建 settings-security.xml（nexus-staging-maven-plugin 1.7.0 需要此文件）
+          # 空的 master 标签表示不使用密码加密，直接使用明文密码
+          cat > ~/.m2/settings-security.xml << 'EOF'
+          <settingsSecurity>
+            <master></master>
+          </settingsSecurity>
+          EOF
 
       - name: Import GPG key
         env:
@@ -38,17 +63,6 @@ jobs:
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           # 列出导入的 key（用于调试）
           gpg --list-secret-keys --keyid-format LONG
-
-      - name: Ensure settings-security.xml exists
-        run: |
-          mkdir -p ~/.m2
-          # 创建 settings-security.xml（nexus-staging-maven-plugin 1.7.0 需要此文件）
-          # 空的 master 标签表示不使用密码加密，直接使用明文密码（CI 环境安全）
-          cat > ~/.m2/settings-security.xml << 'EOF'
-          <settingsSecurity>
-            <master></master>
-          </settingsSecurity>
-          EOF
 
       - name: Build and deploy
         env:
