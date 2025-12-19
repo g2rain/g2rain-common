@@ -29,6 +29,17 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
+      - name: Ensure settings-security.xml exists
+        run: |
+          mkdir -p ~/.m2
+          # 创建 settings-security.xml（nexus-staging-maven-plugin 1.7.0 需要此文件）
+          # 空的 master 标签表示不使用密码加密，直接使用明文密码（CI 环境安全）
+          cat > ~/.m2/settings-security.xml << 'EOF'
+          <settingsSecurity>
+            <master></master>
+          </settingsSecurity>
+          EOF
+
       - name: Build and deploy
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
