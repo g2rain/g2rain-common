@@ -64,22 +64,14 @@ jobs:
           MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
         run: |
-          # 导入 GPG key
+          # 导入 GPG 私钥（用于签名）
           echo "$MAVEN_GPG_PRIVATE_KEY" | base64 --decode | gpg --batch --import
           # 配置 GPG 使用 batch 模式
           echo "use-agent" >> ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           # 列出导入的 key（用于调试）
           gpg --list-secret-keys --keyid-format LONG
-          # 获取 key ID（用于上传公钥）
-          KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep "^sec" | head -1 | awk '{print $2}' | cut -d'/' -f2)
-          echo "GPG Key ID: ${KEY_ID}"
-          # 导出公钥并上传到 PGP 服务器（Maven Central 需要）
-          # 尝试多个 PGP 服务器以确保成功
-          gpg --keyserver hkp://keyserver.ubuntu.com --send-keys "${KEY_ID}" || \
-          gpg --keyserver hkp://pgp.mit.edu --send-keys "${KEY_ID}" || \
-          gpg --keyserver hkp://keys.openpgp.org --send-keys "${KEY_ID}" || \
-          echo "Warning: Failed to upload public key, but continuing..."
+          # 注意：GPG 公钥已手动上传到 PGP 服务器，无需在此步骤中上传
 
       - name: Build and deploy
         env:
