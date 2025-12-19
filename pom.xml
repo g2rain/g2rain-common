@@ -17,6 +17,9 @@
         Aims to improve development efficiency and maintain code consistency.
     </description>
 
+    <!-- Project URL: Maven Central 要求必须配置 -->
+    <url>https://github.com/g2rain/g2rain-common</url>
+
     <scm>
         <url>https://github.com/g2rain/g2rain-common</url>
         <connection>scm:git:https://github.com/g2rain/g2rain-common.git</connection>

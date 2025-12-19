@@ -71,6 +71,15 @@ jobs:
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           # 列出导入的 key（用于调试）
           gpg --list-secret-keys --keyid-format LONG
+          # 获取 key ID（用于上传公钥）
+          KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep "^sec" | head -1 | awk '{print $2}' | cut -d'/' -f2)
+          echo "GPG Key ID: ${KEY_ID}"
+          # 导出公钥并上传到 PGP 服务器（Maven Central 需要）
+          # 尝试多个 PGP 服务器以确保成功
+          gpg --keyserver hkp://keyserver.ubuntu.com --send-keys "${KEY_ID}" || \
+          gpg --keyserver hkp://pgp.mit.edu --send-keys "${KEY_ID}" || \
+          gpg --keyserver hkp://keys.openpgp.org --send-keys "${KEY_ID}" || \
+          echo "Warning: Failed to upload public key, but continuing..."
 
       - name: Build and deploy
         env:
