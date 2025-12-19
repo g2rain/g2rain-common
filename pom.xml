@@ -53,14 +53,12 @@
     </developers>
 
     <distributionManagement>
+        <!-- Snapshot 仓库配置 -->
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <id>central</id>
+            <url>https://central.sonatype.com/content/repositories/snapshots</url>
         </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
+        <!-- Release 仓库由 central-publishing-maven-plugin 自动处理，无需配置 -->
     </distributionManagement>
 
     <properties>
@@ -81,7 +79,7 @@
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
         <flatten.maven.plugin.version>1.7.3</flatten.maven.plugin.version>
         <maven.gpg.plugin.version>3.2.7</maven.gpg.plugin.version>
-        <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
+        <central.publishing.maven.plugin.version>0.9.0</central.publishing.maven.plugin.version>
         <maven.compiler.release>21</maven.compiler.release>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -361,16 +359,19 @@
                         </executions>
                     </plugin>
 
-                    <!-- Sonatype Nexus staging 插件：自动 close & release -->
+                    <!-- Central Publishing Maven Plugin：使用新的 Central Publisher Portal -->
+                    <!-- 参考文档：https://central.sonatype.org/publish/publish-portal-maven/ -->
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central.publishing.maven.plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <!-- 自动发布，无需手动干预（适合 CI 构建） -->
+                            <autoPublish>true</autoPublish>
+                            <!-- 等待直到发布完成 -->
+                            <waitUntil>published</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>
