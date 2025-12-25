@@ -62,7 +62,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 <dependency>
     <groupId>com.g2rain</groupId>
     <artifactId>g2rain-common</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -70,7 +70,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 
 ```groovy
 dependencies {
-    implementation "com.g2rain:g2rain-common:1.0.0"
+    implementation "com.g2rain:g2rain-common:1.0.1"
 }
 ```
 
