@@ -3,6 +3,7 @@ package com.g2rain.common.model;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,20 +24,17 @@ class BaseSelectListDtoTest {
         assertNull(dto.getIds());
         assertNull(dto.getUpdateTime());
         assertNull(dto.getCreateTime());
-        assertNull(dto.getVersion());
 
         // 测试设置和获取属性
         dto.setId(1L);
         dto.setIds(Set.of(1L, 2L, 3L));
-        dto.setUpdateTime(new String[]{"2023-10-15 14:30:45", "2023-10-15 15:30:45"});
-        dto.setCreateTime(new String[]{"2023-10-15 14:30:45", "2023-10-15 15:30:45"});
-        dto.setVersion(1);
+        dto.setUpdateTime(List.of("2023-10-15 14:30:45", "2023-10-15 15:30:45"));
+        dto.setCreateTime(List.of("2023-10-15 14:30:45", "2023-10-15 15:30:45"));
 
         assertEquals(1L, dto.getId());
         assertEquals(3, dto.getIds().size());
-        assertEquals(2, dto.getUpdateTime().length);
-        assertEquals(2, dto.getCreateTime().length);
-        assertEquals(1, dto.getVersion());
+        assertEquals(2, dto.getUpdateTime().size());
+        assertEquals(2, dto.getCreateTime().size());
     }
 
     @Test

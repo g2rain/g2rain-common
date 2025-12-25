@@ -1,9 +1,7 @@
 package com.g2rain.common.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.Objects;
+import lombok.Setter;
 
 /**
  * 分页查询参数的基础类
@@ -22,19 +20,27 @@ import java.util.Objects;
  * @author jagger
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Setter
 public class BasePageSelectListDto extends BaseSelectListDto {
     public static final int DEFAULT_PAGE_SIZE = 10;
 
     /**
      * 当前页码，最小页码为
      */
-    private Integer pageNum;
+    private int pageNum;
 
     /**
      * 每页条数
      */
-    private Integer pageSize;
+    private int pageSize;
+
+    public int getPageNum() {
+        return Math.max(pageNum, 1);
+    }
+
+    public int getPageSize() {
+        return pageSize <= 0 ? DEFAULT_PAGE_SIZE : pageSize;
+    }
 
     /**
      * 计算分页查询的偏移量
@@ -56,7 +62,7 @@ public class BasePageSelectListDto extends BaseSelectListDto {
      * @return 分页查询的偏移量
      */
     public int getOffset() {
-        return Objects.isNull(pageNum) || pageNum < 1 ? 0 : (pageNum - 1) * getLimit();
+        return (getPageNum() - 1) * getLimit();
     }
 
     /**
@@ -81,6 +87,6 @@ public class BasePageSelectListDto extends BaseSelectListDto {
      * @return 分页查询的限制数
      */
     public int getLimit() {
-        return Objects.isNull(pageSize) || pageSize <= 0 ? DEFAULT_PAGE_SIZE : pageSize;
+        return getPageSize();
     }
 }

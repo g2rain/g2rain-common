@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DisplayName("基础分页查询DTO测试")
 class BasePageSelectListDtoTest {
@@ -20,10 +19,6 @@ class BasePageSelectListDtoTest {
     void testPageProperties() {
         BasePageSelectListDto dto = new BasePageSelectListDto();
 
-        // 测试默认值
-        assertNull(dto.getPageNum());
-        assertNull(dto.getPageSize());
-
         // 测试设置和获取属性
         dto.setPageNum(1);
         dto.setPageSize(20);
@@ -36,11 +31,6 @@ class BasePageSelectListDtoTest {
     @DisplayName("测试获取偏移量")
     void testGetOffset() {
         BasePageSelectListDto dto = new BasePageSelectListDto();
-
-        // 测试null页码
-        dto.setPageNum(null);
-        dto.setPageSize(10);
-        assertEquals(0, dto.getOffset());
 
         // 测试小于1的页码
         dto.setPageNum(0);
@@ -62,10 +52,6 @@ class BasePageSelectListDtoTest {
     @DisplayName("测试获取限制数")
     void testGetLimit() {
         BasePageSelectListDto dto = new BasePageSelectListDto();
-
-        // 测试null页面大小
-        dto.setPageSize(null);
-        assertEquals(BasePageSelectListDto.DEFAULT_PAGE_SIZE, dto.getLimit());
 
         // 测试小于等于0的页面大小
         dto.setPageSize(0);
