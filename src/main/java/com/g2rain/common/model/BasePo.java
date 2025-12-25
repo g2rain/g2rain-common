@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * Po类得基础类
+ * Po类的基础类
  *
  * @author jagger
  */

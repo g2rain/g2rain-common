@@ -25,7 +25,7 @@ public class BasePageSelectListDto extends BaseSelectListDto {
     public static final int DEFAULT_PAGE_SIZE = 10;
 
     /**
-     * 当前页码，最小页码为
+     * 当前页码，最小页码为1
      */
     private int pageNum;
 
@@ -47,7 +47,7 @@ public class BasePageSelectListDto extends BaseSelectListDto {
      *
      * <p>偏移量计算公式：(页码 - 1) * 每页条数
      * <ul>
-     *   <li>如果pageNum为null或小于1，则返回0</li>
+     *   <li>如果pageNum小于1，则返回0</li>
      *   <li>否则返回(pageNum - 1) * limit</li>
      * </ul>
      *
@@ -70,7 +70,7 @@ public class BasePageSelectListDto extends BaseSelectListDto {
      *
      * <p>限制数逻辑：
      * <ul>
-     *   <li>如果pageSize为null或小于等于0，则使用默认页面大小（10）</li>
+     *   <li>如果pageSize小于等于0，则使用默认页面大小（10）</li>
      *   <li>否则返回pageSize的值</li>
      * </ul>
      *

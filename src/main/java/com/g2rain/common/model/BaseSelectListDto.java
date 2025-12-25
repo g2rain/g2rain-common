@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * 查询列表的基础入参，主要包括id，创建时间段和结束时间端
+ * 查询列表的基础入参，主要包括id，创建时间段和结束时间段
  *
  * @author jagger
  */
@@ -36,7 +36,7 @@ public class BaseSelectListDto {
     private List<String> createTime;
 
     /**
-     * 像ids集合中添加元素
+     * 向ids集合中添加元素
      */
     public void addId(Long id) {
         if (Objects.isNull(id)) {

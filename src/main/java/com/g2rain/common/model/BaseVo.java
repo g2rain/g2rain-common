@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
- * Vo类得基础类
+ * Vo类的基础类
  *
  * @author jagger
  */
@@ -31,6 +31,5 @@ public class BaseVo {
      * 默认构造函数
      */
     public BaseVo() {
-        super();
     }
 }

@@ -20,7 +20,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 - **线程安全设计**：基于TransmittableThreadLocal的线程安全实现
 
 ### 📄 JSON处理增强
-- **高精度序列化**：基于Jackson 2.19.2，保留数字原始格式
+- **高精度序列化**：基于Jackson 3.0.2，保留数字原始格式
 - **自定义反序列化**：RawNumberDeserializer避免精度丢失
 - **灵活配置**：JsonCodecBuilder支持多种Jackson配置
 - **工厂模式访问**：JsonCodecFactory提供默认配置实例
