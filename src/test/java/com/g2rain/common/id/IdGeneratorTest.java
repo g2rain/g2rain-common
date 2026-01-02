@@ -18,6 +18,16 @@ class IdGeneratorTest {
             public Long generateId() {
                 return 123456789L;
             }
+
+            @Override
+            public Long generateId(String bizTag) {
+                return 123456789L;
+            }
+
+            @Override
+            public Long generateSnowflakeId() {
+                return 123456789L;
+            }
         };
 
         Long id = idGenerator.generateId();

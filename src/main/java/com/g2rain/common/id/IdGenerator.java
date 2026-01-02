@@ -7,9 +7,23 @@ package com.g2rain.common.id;
  */
 public interface IdGenerator {
     /**
-     * 生成一个Long类型的唯一ID
+     * 根据默认标签, 生成一个 Long 类型的唯一ID
      *
-     * @return 唯一标识ID（适配雪花算法字符串形式、UUID、分布式发号器等实现）
+     * @return 唯一标识 ID
      */
     Long generateId();
+
+    /**
+     * 根据业务标签, 生成一个 Long 类型的唯一ID
+     *
+     * @return 唯一标识 ID
+     */
+    Long generateId(String bizTag);
+
+    /**
+     * 实现雪花算法, 生成一个 Long 类型的唯一ID
+     *
+     * @return 唯一标识 ID
+     */
+    Long generateSnowflakeId();
 }
