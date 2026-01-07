@@ -71,7 +71,7 @@ public class BasePageSelectListDto extends BaseSelectListDto {
      * <p>限制数逻辑：
      * <ul>
      *   <li>如果pageSize小于等于0，则使用默认页面大小（10）</li>
-     *   <li>否则返回pageSize的值</li>
+     *   <li>否则返回 pageSize 的值</li>
      * </ul>
      *
      * <p>使用示例：
