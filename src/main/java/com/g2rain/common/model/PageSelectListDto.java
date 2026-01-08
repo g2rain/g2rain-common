@@ -1,6 +1,6 @@
 package com.g2rain.common.model;
 
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -19,19 +19,23 @@ import lombok.Setter;
  *
  * @author jagger
  */
-@EqualsAndHashCode(callSuper = true)
-@Setter
-public class BasePageSelectListDto extends BaseSelectListDto {
+public class PageSelectListDto<T> {
     public static final int DEFAULT_PAGE_SIZE = 10;
+
+    @Setter
+    @Getter
+    private T query;
 
     /**
      * 当前页码，最小页码为1
      */
+    @Setter
     private int pageNum;
 
     /**
      * 每页条数
      */
+    @Setter
     private int pageSize;
 
     public int getPageNum() {

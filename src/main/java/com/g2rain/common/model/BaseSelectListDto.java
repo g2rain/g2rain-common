@@ -2,7 +2,10 @@ package com.g2rain.common.model;
 
 import com.g2rain.common.utils.Collections;
 import com.g2rain.common.utils.Strings;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,12 +28,15 @@ import java.util.Set;
  * @author jagger
  * @since 2026/01/07
  */
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BaseSelectListDto {
 
     /**
      * 主键, 用于精确查询单条记录
      */
+    @Setter
+    @Getter
     private Long id;
 
     /**
@@ -38,6 +44,8 @@ public class BaseSelectListDto {
      * <p>
      * 调用 {@link #addId(Long)} 可向集合添加元素
      */
+    @Setter
+    @Getter
     private Set<Long> ids;
 
     /**
@@ -48,6 +56,8 @@ public class BaseSelectListDto {
      * </ul>
      * 格式按前端约定, 通常为 ISO 字符串
      */
+    @Setter
+    @Getter
     private List<String> updateTime;
 
     /**
@@ -58,6 +68,8 @@ public class BaseSelectListDto {
      * </ul>
      * 格式按前端约定, 通常为 ISO 字符串
      */
+    @Setter
+    @Getter
     private List<String> createTime;
 
     /**
@@ -76,6 +88,7 @@ public class BaseSelectListDto {
      *     <li>direction 可为 "asc" 或 "desc", 不区分大小写</li>
      * </ul>
      */
+    @Setter
     private List<String> sorts;
 
     /**
