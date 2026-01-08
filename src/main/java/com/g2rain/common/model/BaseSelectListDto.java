@@ -54,7 +54,7 @@ public class BaseSelectListDto {
      *     <li>第一个元素：开始时间</li>
      *     <li>第二个元素：结束时间</li>
      * </ul>
-     * 格式按前端约定, 通常为 ISO 字符串
+     * 格式按前端约定, 通常为 YYYY-MM-DD HH:mm:ss 字符串
      */
     @Setter
     @Getter
@@ -66,7 +66,7 @@ public class BaseSelectListDto {
      *     <li>第一个元素：开始时间</li>
      *     <li>第二个元素：结束时间</li>
      * </ul>
-     * 格式按前端约定, 通常为 ISO 字符串
+     * 格式按前端约定, 通常为 YYYY-MM-DD HH:mm:ss 字符串
      */
     @Setter
     @Getter
