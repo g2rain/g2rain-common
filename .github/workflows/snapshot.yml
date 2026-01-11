@@ -44,7 +44,7 @@ jobs:
                                         https://maven.apache.org/xsd/settings-1.0.0.xsd">
             <servers>
               <server>
-                <id>central</id>
+                <id>ossrh</id>
                 <username>${CENTRAL_PORTAL_USERNAME}</username>
                 <password>${CENTRAL_PORTAL_PASSWORD}</password>
               </server>
