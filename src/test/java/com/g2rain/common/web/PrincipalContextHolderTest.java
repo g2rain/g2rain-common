@@ -82,15 +82,15 @@ class PrincipalContextHolderTest {
     @Test
     @DisplayName("测试设置和获取通行证ID")
     void testSetAndGetPassportId() {
-        PrincipalContextHolder.setPassportId("passport123");
-        assertEquals("passport123", PrincipalContextHolder.getPassportId());
+        PrincipalContextHolder.setPassportId(123L);
+        assertEquals(123L, PrincipalContextHolder.getPassportId());
     }
 
     @Test
     @DisplayName("测试设置和获取用户ID")
     void testSetAndGetUserId() {
-        PrincipalContextHolder.setUserId("user123");
-        assertEquals("user123", PrincipalContextHolder.getUserId());
+        PrincipalContextHolder.setUserId(456L);
+        assertEquals(456L, PrincipalContextHolder.getUserId());
     }
 
     @Test
@@ -120,8 +120,8 @@ class PrincipalContextHolderTest {
     @Test
     @DisplayName("测试设置和获取组织ID")
     void testSetAndGetOrganId() {
-        PrincipalContextHolder.setOrganId("organ123");
-        assertEquals("organ123", PrincipalContextHolder.getOrganId());
+        PrincipalContextHolder.setOrganId(123L);
+        assertEquals(123L, PrincipalContextHolder.getOrganId());
     }
 
     @Test
@@ -144,15 +144,15 @@ class PrincipalContextHolderTest {
     @Test
     @DisplayName("测试设置和获取应用ID")
     void testSetAndGetApplicationId() {
-        PrincipalContextHolder.setApplicationId("app123");
-        assertEquals("app123", PrincipalContextHolder.getApplicationId());
+        PrincipalContextHolder.setApplicationId(123L);
+        assertEquals(123L, PrincipalContextHolder.getApplicationId());
     }
 
     @Test
     @DisplayName("测试设置和获取应用组织ID")
     void testSetAndGetApplicationOrganId() {
-        PrincipalContextHolder.setApplicationOrganId("appOrgan123");
-        assertEquals("appOrgan123", PrincipalContextHolder.getApplicationOrganId());
+        PrincipalContextHolder.setApplicationOrganId(456L);
+        assertEquals(456L, PrincipalContextHolder.getApplicationOrganId());
     }
 
     @Test

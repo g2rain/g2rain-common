@@ -149,7 +149,12 @@ public enum SystemErrorCode implements ErrorCode {
     /**
      * 修改失败
      */
-    UPDATE_DATA_ERROR("system.50011", "ID：{0:id} 修改失败");
+    UPDATE_DATA_ERROR("system.50011", "ID：{0:id} 修改失败"),
+
+    /**
+     * 数据已存在
+     */
+    DATA_EXISTS("system.50012", "数据已存在");
 
     private final String code;
 

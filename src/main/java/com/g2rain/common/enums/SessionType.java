@@ -8,11 +8,8 @@ import java.util.Objects;
  * <p>
  * 当前支持的会话类型包括：
  * <ul>
- *     <li>{@link #ANONYMOUS} — 游客身份</li>
  *     <li>{@link #USER} — 用户登录 IoT 身份类型</li>
  *     <li>{@link #PASSPORT} — 账号登录 IoT 身份类型</li>
- *     <li>{@link #APP_TENANT} — 开发者应用 + 商户身份</li>
- *     <li>{@link #APP} — 开发者应用</li>
  * </ul>
  * <p>
  * 提供了身份类型判断方法，方便业务逻辑快速识别会话类型。
@@ -31,11 +28,6 @@ import java.util.Objects;
 public enum SessionType {
 
     /**
-     * 游客身份
-     */
-    ANONYMOUS,
-
-    /**
      * 用户登录
      */
     USER,
@@ -43,33 +35,7 @@ public enum SessionType {
     /**
      * 账号登录
      */
-    PASSPORT,
-
-    /**
-     * 开放平台
-     */
-    APP,
-
-    /**
-     * 开发者应用 + 商户身份
-     */
-    APP_TENANT;
-
-    /**
-     * 判断给定会话类型是否为 {@link #ANONYMOUS}（游客身份）。
-     * <p>
-     * <b>示例：</b>
-     * <pre>{@code
-     * boolean result = SessionType.isAnonymous(SessionType.ANONYMOUS);
-     * System.out.println(result); // 输出：true
-     * }</pre>
-     *
-     * @param sessionType 待判断的会话类型
-     * @return {@code true} 如果是 {@link #ANONYMOUS} 类型，否则 {@code false}
-     */
-    public static boolean isAnonymous(SessionType sessionType) {
-        return Objects.nonNull(sessionType) && ANONYMOUS == sessionType;
-    }
+    PASSPORT;
 
     /**
      * 判断给定会话类型是否为 {@link #USER}（用户登录身份）。
@@ -101,37 +67,5 @@ public enum SessionType {
      */
     public static boolean isPassport(SessionType sessionType) {
         return Objects.nonNull(sessionType) && PASSPORT == sessionType;
-    }
-
-    /**
-     * 判断给定会话类型是否为 {@link #APP}（开发者应用身份）。
-     * <p>
-     * <b>示例：</b>
-     * <pre>{@code
-     * boolean result = SessionType.isApp(SessionType.APP);
-     * System.out.println(result); // 输出：true
-     * }</pre>
-     *
-     * @param sessionType 待判断的会话类型
-     * @return {@code true} 如果是 {@link #APP} 类型，否则 {@code false}
-     */
-    public static boolean isApp(SessionType sessionType) {
-        return Objects.nonNull(sessionType) && APP == sessionType;
-    }
-
-    /**
-     * 判断给定会话类型是否为 {@link #APP_TENANT}（开发者应用 + 商户身份）。
-     * <p>
-     * <b>示例：</b>
-     * <pre>{@code
-     * boolean result = SessionType.isAppTenant(SessionType.APP_TENANT);
-     * System.out.println(result); // 输出：true
-     * }</pre>
-     *
-     * @param sessionType 待判断的会话类型
-     * @return {@code true} 如果是 {@link #APP_TENANT} 类型，否则 {@code false}
-     */
-    public static boolean isAppTenant(SessionType sessionType) {
-        return Objects.nonNull(sessionType) && APP_TENANT == sessionType;
     }
 }

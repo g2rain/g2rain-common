@@ -61,14 +61,6 @@ public class PrincipalContextHolder {
     }
 
     // 以下为 PrincipalContext 属性的快捷访问方法
-    public static void setAcceptLanguage(String acceptLanguage) {
-        get().setAcceptLanguage(acceptLanguage);
-    }
-
-    public static String getAcceptLanguage() {
-        return get().getAcceptLanguage();
-    }
-
     public static void setClientId(String clientId) {
         get().setClientId(clientId);
     }
@@ -101,6 +93,30 @@ public class PrincipalContextHolder {
         return get().getRequestTime();
     }
 
+    public static void setDebug(boolean debug) {
+        get().setDebug(debug);
+    }
+
+    public static boolean isDebug() {
+        return get().isDebug();
+    }
+
+    public static void setBackEnd(boolean backEnd) {
+        get().setBackEnd(backEnd);
+    }
+
+    public static boolean isBackEnd() {
+        return get().isBackEnd();
+    }
+
+    public static void setAcceptLanguage(String acceptLanguage) {
+        get().setAcceptLanguage(acceptLanguage);
+    }
+
+    public static String getAcceptLanguage() {
+        return get().getAcceptLanguage();
+    }
+
     public static void setSessionType(SessionType sessionType) {
         get().setSessionType(sessionType);
     }
@@ -109,19 +125,19 @@ public class PrincipalContextHolder {
         return get().getSessionType();
     }
 
-    public static void setPassportId(String passportId) {
+    public static void setPassportId(Long passportId) {
         get().setPassportId(passportId);
     }
 
-    public static String getPassportId() {
+    public static Long getPassportId() {
         return get().getPassportId();
     }
 
-    public static void setUserId(String userId) {
+    public static void setUserId(Long userId) {
         get().setUserId(userId);
     }
 
-    public static String getUserId() {
+    public static Long getUserId() {
         return get().getUserId();
     }
 
@@ -141,19 +157,11 @@ public class PrincipalContextHolder {
         return get().isAdminUser();
     }
 
-    public static void setOrganType(OrganType organType) {
-        get().setOrganType(organType);
-    }
-
-    public static OrganType getOrganType() {
-        return get().getOrganType();
-    }
-
-    public static void setOrganId(String organId) {
+    public static void setOrganId(Long organId) {
         get().setOrganId(organId);
     }
 
-    public static String getOrganId() {
+    public static Long getOrganId() {
         return get().getOrganId();
     }
 
@@ -165,6 +173,14 @@ public class PrincipalContextHolder {
         return get().getOrganName();
     }
 
+    public static void setOrganType(OrganType organType) {
+        get().setOrganType(organType);
+    }
+
+    public static OrganType getOrganType() {
+        return get().getOrganType();
+    }
+
     public static void setAdminCompany(boolean admin) {
         get().setAdminCompany(admin);
     }
@@ -173,35 +189,19 @@ public class PrincipalContextHolder {
         return get().isAdminCompany();
     }
 
-    public static void setApplicationId(String applicationId) {
+    public static void setApplicationId(Long applicationId) {
         get().setApplicationId(applicationId);
     }
 
-    public static String getApplicationId() {
+    public static Long getApplicationId() {
         return get().getApplicationId();
     }
 
-    public static void setApplicationOrganId(String applicationOrganId) {
+    public static void setApplicationOrganId(Long applicationOrganId) {
         get().setApplicationOrganId(applicationOrganId);
     }
 
-    public static String getApplicationOrganId() {
+    public static Long getApplicationOrganId() {
         return get().getApplicationOrganId();
-    }
-
-    public static void setDebug(boolean debug) {
-        get().setDebug(debug);
-    }
-
-    public static boolean isDebug() {
-        return get().isDebug();
-    }
-
-    public static void setBackEnd(boolean backEnd) {
-        get().setBackEnd(backEnd);
-    }
-
-    public static boolean isBackEnd() {
-        return get().isBackEnd();
     }
 }

@@ -5,8 +5,6 @@ import com.g2rain.common.enums.SessionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -36,7 +34,6 @@ class TokenJWTPayloadTest {
         assertNull(payload.getExpireAt());
         assertNull(payload.getRefreshExpireAt());
         assertNull(payload.getClientId());
-        assertNull(payload.getApplicationCodes());
     }
 
     @Test
@@ -46,12 +43,12 @@ class TokenJWTPayloadTest {
 
         // 设置基础主体属性
         payload.setSessionType(SessionType.USER);
-        payload.setPassportId("passport123");
-        payload.setUserId("user123");
+        payload.setPassportId(123L);
+        payload.setUserId(456L);
         payload.setName("John Doe");
         payload.setAdminUser(true);
         payload.setOrganType(OrganType.COMPANY);
-        payload.setOrganId("company123");
+        payload.setOrganId(789L);
         payload.setOrganName("Test Company");
         payload.setAdminCompany(true);
 
@@ -60,16 +57,15 @@ class TokenJWTPayloadTest {
         payload.setExpireAt(1234567890L + 3600L);
         payload.setRefreshExpireAt(1234567890L + 86400L);
         payload.setClientId("key123");
-        payload.setApplicationCodes(List.of("app1", "app2"));
 
         // 验证基础主体属性
         assertEquals(SessionType.USER, payload.getSessionType());
-        assertEquals("passport123", payload.getPassportId());
-        assertEquals("user123", payload.getUserId());
+        assertEquals(123L, payload.getPassportId());
+        assertEquals(456L, payload.getUserId());
         assertEquals("John Doe", payload.getName());
         assertTrue(payload.isAdminUser());
         assertEquals(OrganType.COMPANY, payload.getOrganType());
-        assertEquals("company123", payload.getOrganId());
+        assertEquals(789L, payload.getOrganId());
         assertEquals("Test Company", payload.getOrganName());
         assertTrue(payload.isAdminCompany());
 
@@ -78,6 +74,5 @@ class TokenJWTPayloadTest {
         assertEquals(1234567890L + 3600L, payload.getExpireAt());
         assertEquals(1234567890L + 86400L, payload.getRefreshExpireAt());
         assertEquals("key123", payload.getClientId());
-        assertEquals(List.of("app1", "app2"), payload.getApplicationCodes());
     }
 }

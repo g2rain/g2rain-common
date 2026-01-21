@@ -18,7 +18,7 @@ import java.util.List;
  *     <li>{@link #expireAt}：Token 过期时间（Unix 时间戳，单位秒）</li>
  *     <li>{@link #refreshExpireAt}：刷新 Token 的过期时间（Unix 时间戳，单位秒）</li>
  *     <li>{@link #clientPublicKey}：客户端 DPoP 公钥，用于绑定 Token 和客户端</li>
- *     <li>{@link #applicationCodes}：应用编码集合，用于鉴权判断请求所属应用权限</li>
+ *     <li>{@link #applicationScopes}：应用作用域集合，用于鉴权判断请求所属应用权限</li>
  * </ul>
  *
  * <p><b>使用示例：</b></p>
@@ -28,7 +28,6 @@ import java.util.List;
  * payload.setExpireAt(System.currentTimeMillis() / 1000 + 3600);
  * payload.setRefreshExpireAt(System.currentTimeMillis() / 1000 + 7200);
  * payload.setClientPublicKey("base64-dpop-key");
- * payload.setApplicationCodes(List.of("app1", "app2"));
  * }</pre>
  *
  * @author alpha
@@ -57,14 +56,23 @@ public class TokenJWTPayload extends BasePrincipal {
     private Long refreshExpireAt;
 
     /**
-     * DPoP公钥
+     * DPoP 公钥
      * <p>与clientId搭配绑定到Token, 将客户端DPoP和Token进行绑定</p>
      */
     private String clientPublicKey;
 
     /**
-     * 应用编码集合
-     * <p>用于鉴权，标识当前请求归属的应用是否有权限。</p>
+     * 应用作用域集合
+     * <p>
+     * 用于鉴权场景，描述当前 Token 可访问的应用范围。
+     * 每个元素同时包含：
+     * <ul>
+     *   <li>applicationId：应用标识</li>
+     *   <li>applicationCode：应用编码</li>
+     *   <li>applicationOrganId：应用所属机构标识</li>
+     * </ul>
+     * 用于精确限定 Token 的有效应用上下文。
+     * </p>
      */
-    private List<String> applicationCodes;
+    private List<ApplicationScope> applicationScopes;
 }
