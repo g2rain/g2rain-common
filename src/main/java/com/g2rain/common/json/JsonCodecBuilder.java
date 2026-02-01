@@ -182,6 +182,9 @@ public final class JsonCodecBuilder {
 
         // 15. 允许单引号
         this.builder.enable(JsonReadFeature.ALLOW_SINGLE_QUOTES);
+
+        // 16. JSON 中的控制字符（如 ASCII 0-31 范围内的字符）不进行转义并成功解析
+        this.builder.enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS);
         return this;
     }
 
