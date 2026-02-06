@@ -65,7 +65,7 @@
     </distributionManagement>
 
     <properties>
-        <jackson.databind.version>3.0.2</jackson.databind.version>
+        <jackson.databind.version>3.0.4</jackson.databind.version>
         <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
         <junit.jupiter.version>5.13.4</junit.jupiter.version>
         <mockito.core.version>5.17.0</mockito.core.version>
