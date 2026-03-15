@@ -87,15 +87,5 @@ class PrincipalContextTest {
 
         context.setValue(PrincipalHeaders.DEBUG, null);
         assertFalse(context.isDebug());
-
-        // 测试backEnd
-        context.setValue(PrincipalHeaders.BACK_END, "true");
-        assertTrue(context.isBackEnd());
-
-        context.setValue(PrincipalHeaders.BACK_END, "false");
-        assertFalse(context.isBackEnd());
-
-        context.setValue(PrincipalHeaders.BACK_END, null);
-        assertFalse(context.isBackEnd());
     }
 }

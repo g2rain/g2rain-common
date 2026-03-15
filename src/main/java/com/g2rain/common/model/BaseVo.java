@@ -31,5 +31,6 @@ public class BaseVo {
      * 默认构造函数
      */
     public BaseVo() {
+        // no-op
     }
 }

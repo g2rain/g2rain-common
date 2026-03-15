@@ -125,11 +125,4 @@ class PrincipalHeadersTest {
         assertEquals("X-DEBUG", PrincipalHeaders.DEBUG.getUpper());
         assertEquals("x-debug", PrincipalHeaders.DEBUG.getLower());
     }
-
-    @Test
-    @DisplayName("测试后端头部")
-    void testBackEnd() {
-        assertEquals("X-BACK-END", PrincipalHeaders.BACK_END.getUpper());
-        assertEquals("x-back-end", PrincipalHeaders.BACK_END.getLower());
-    }
 }

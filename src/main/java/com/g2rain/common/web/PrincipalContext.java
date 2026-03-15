@@ -10,6 +10,10 @@ import lombok.Setter;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -97,6 +101,14 @@ public class PrincipalContext extends BasePrincipal {
     }
 
     /**
+     * 如果没有传递应用标识, 视为后端发起请求标记位
+     * @return 后端发起请求标记位
+     */
+    public boolean isBackEnd() {
+        return Objects.isNull(this.applicationId);
+    }
+
+    /**
      * 根据请求头部的 Key 获取对应的属性值。
      *
      * @param headerKey 请求头部的 Key
@@ -109,7 +121,6 @@ public class PrincipalContext extends BasePrincipal {
             case REQUEST_ID -> this.requestId;
             case REQUEST_TIME -> this.requestTime;
             case DEBUG -> String.valueOf(this.debug);
-            case BACK_END -> String.valueOf(this.backEnd);
             case ACCEPT_LANGUAGE -> this.acceptLanguage;
             case SESSION_TYPE -> toStrOrNull(this.sessionType);
             case PASSPORT_ID -> toStrOrNull(this.passportId);
@@ -117,6 +128,7 @@ public class PrincipalContext extends BasePrincipal {
             case NAME -> this.name;
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
+            case TARGET_ORGAN_ID -> toStrOrNull(this.targetOrganId);
             case ORGAN_NAME -> safeDecode(this.organName);
             case ORGAN_TYPE -> toStrOrNull(this.organType);
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
@@ -143,7 +155,6 @@ public class PrincipalContext extends BasePrincipal {
             case REQUEST_ID -> this.requestId = value;
             case REQUEST_TIME -> this.requestTime = value;
             case DEBUG -> this.debug = Boolean.parseBoolean(value);
-            case BACK_END -> this.backEnd = Boolean.parseBoolean(value);
             case ACCEPT_LANGUAGE -> this.acceptLanguage = value;
             // 这个地方没有做任何非空和合法性校验 是因为, 这个值如果非法说明是被攻击或者存在bug, 需要修复
             case SESSION_TYPE -> this.sessionType = SessionType.valueOf(value);
@@ -155,10 +166,94 @@ public class PrincipalContext extends BasePrincipal {
             case ORGAN_ID -> this.organId = parseLongOrNull(value);
             case ORGAN_NAME -> this.organName = value;
             case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
+            case TARGET_ORGAN_ID -> this.targetOrganId = parseLongOrNull(value);
             case APP_ID -> this.applicationId = parseLongOrNull(value);
             case APP_ORGAN_ID -> this.applicationOrganId = parseLongOrNull(value);
             default -> { /* 什么都不做 */ }
         }
+    }
+
+    /**
+     * 从当前 {@link PrincipalContext} 获取所有需要透传到 Feign 请求的 Header 信息。
+     *
+     * <p>具体行为：</p>
+     * <ul>
+     *     <li>Boolean 类型字段（如 adminUser、adminCompany、debug、backEnd）转换为字符串 "true"/"false"</li>
+     *     <li>Long 类型字段（如 passportId、userId、organId、applicationId、applicationOrganId）转换为字符串</li>
+     *     <li>枚举类型字段（如 sessionType、organType）使用枚举名称作为字符串</li>
+     *     <li>其他 String 类型字段（如 clientId、name、organName、traceId、requestId、requestTime、acceptLanguage）直接使用原值</li>
+     *     <li>仅在值非 null 或非空时才加入 Map，避免空值覆盖 Header</li>
+     * </ul>
+     *
+     * @return 包含所有需要透传的 Header 的 Map，其中 Key 为 Header 名，Value 为单元素集合
+     */
+    public Map<String, Collection<String>> getHeaders() {
+        Map<String, Collection<String>> headers = new HashMap<>();
+        headers.put(PrincipalHeaders.ADMIN_USER.getUpper(), List.of(Boolean.toString(this.adminUser)));
+        headers.put(PrincipalHeaders.ADMIN_COMPANY.getUpper(), List.of(Boolean.toString(this.adminCompany)));
+        headers.put(PrincipalHeaders.DEBUG.getUpper(), List.of(Boolean.toString(this.debug)));
+
+        if (Strings.isNotBlank(this.clientId)) {
+            headers.put(PrincipalHeaders.CLIENT_ID.getUpper(), List.of(this.clientId));
+        }
+
+        if (Objects.nonNull(this.sessionType)) {
+            headers.put(PrincipalHeaders.SESSION_TYPE.getUpper(), List.of(this.sessionType.name()));
+        }
+
+        if (Objects.nonNull(this.passportId)) {
+            headers.put(PrincipalHeaders.PASSPORT_ID.getUpper(), List.of(String.valueOf(this.passportId)));
+        }
+
+        if (Objects.nonNull(this.userId)) {
+            headers.put(PrincipalHeaders.USER_ID.getUpper(), List.of(String.valueOf(this.userId)));
+        }
+
+        if (Strings.isNotBlank(this.name)) {
+            headers.put(PrincipalHeaders.NAME.getUpper(), List.of(this.name));
+        }
+
+        if (Objects.nonNull(this.organId)) {
+            headers.put(PrincipalHeaders.ORGAN_ID.getUpper(), List.of(String.valueOf(this.organId)));
+        }
+
+        if (Strings.isNotBlank(this.organName)) {
+            headers.put(PrincipalHeaders.ORGAN_NAME.getUpper(), List.of(this.organName));
+        }
+
+        if (Objects.nonNull(this.organType)) {
+            headers.put(PrincipalHeaders.ORGAN_TYPE.getUpper(), List.of(this.organType.name()));
+        }
+
+        if (Strings.isNotBlank(this.traceId)) {
+            headers.put(PrincipalHeaders.TRACE_ID.getUpper(), List.of(this.traceId));
+        }
+
+        if (Strings.isNotBlank(this.requestId)) {
+            headers.put(PrincipalHeaders.REQUEST_ID.getUpper(), List.of(this.requestId));
+        }
+
+        if (Strings.isNotBlank(this.requestTime)) {
+            headers.put(PrincipalHeaders.REQUEST_TIME.getUpper(), List.of(this.requestTime));
+        }
+
+        if (Strings.isNotBlank(this.acceptLanguage)) {
+            headers.put(PrincipalHeaders.ACCEPT_LANGUAGE.getUpper(), List.of(this.acceptLanguage));
+        }
+
+        if (Objects.nonNull(this.applicationId)) {
+            headers.put(PrincipalHeaders.APP_ID.getUpper(), List.of(String.valueOf(this.applicationId)));
+        }
+
+        if (Objects.nonNull(this.applicationOrganId)) {
+            headers.put(PrincipalHeaders.APP_ORGAN_ID.getUpper(), List.of(String.valueOf(this.applicationOrganId)));
+        }
+
+        if (Objects.nonNull(this.targetOrganId)) {
+            headers.put(PrincipalHeaders.TARGET_ORGAN_ID.getUpper(), List.of(String.valueOf(this.targetOrganId)));
+        }
+
+        return headers;
     }
 
     /**
