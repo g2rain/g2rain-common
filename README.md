@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://search.maven.org/artifact/com.g2rain/g2rain-common)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Java Version](https://img.shields.io/badge/Java-21+-orange.svg)](https://openjdk.java.net/)
+[![Java Version](https://img.shields.io/badge/Java-25+-orange.svg)](https://openjdk.java.net/)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/g2rain/g2rain-common)
 
 > 企业级Java基础工具库，提供分布式系统开发的核心组件和实用工具
@@ -53,7 +53,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 
 ### 环境要求
 
-- Java 21+
+- Java 25+
 - Maven 3.6+
 
 ### Maven 依赖
