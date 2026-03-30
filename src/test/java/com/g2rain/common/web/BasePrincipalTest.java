@@ -31,22 +31,22 @@ class BasePrincipalTest {
 
         // 测试设置和获取属性
         principal.setSessionType(SessionType.USER);
-        principal.setPassportId("passport123");
-        principal.setUserId("user123");
+        principal.setPassportId(123L);
+        principal.setUserId(456L);
         principal.setName("John Doe");
         principal.setAdminUser(true);
         principal.setOrganType(OrganType.COMPANY);
-        principal.setOrganId("company123");
+        principal.setOrganId(789L);
         principal.setOrganName("Test Company");
         principal.setAdminCompany(true);
 
         assertEquals(SessionType.USER, principal.getSessionType());
-        assertEquals("passport123", principal.getPassportId());
-        assertEquals("user123", principal.getUserId());
+        assertEquals(123L, principal.getPassportId());
+        assertEquals(456L, principal.getUserId());
         assertEquals("John Doe", principal.getName());
         assertTrue(principal.isAdminUser());
         assertEquals(OrganType.COMPANY, principal.getOrganType());
-        assertEquals("company123", principal.getOrganId());
+        assertEquals(789L, principal.getOrganId());
         assertEquals("Test Company", principal.getOrganName());
         assertTrue(principal.isAdminCompany());
     }

@@ -1,14 +1,14 @@
-name: Release to Maven Central
+name: Deploy Snapshot to Sonatype
 
 on:
   push:
-    tags:
-      - "v*.*.*"   # 例如 v1.0.0
+    branches:
+      - develop
   workflow_dispatch:
 
 jobs:
-  release:
-    name: Publish to Maven Central
+  snapshot:
+    name: Publish Snapshot
     runs-on: ubuntu-latest
 
     steps:
@@ -44,7 +44,7 @@ jobs:
                                         https://maven.apache.org/xsd/settings-1.0.0.xsd">
             <servers>
               <server>
-                <id>central</id>
+                <id>central-portal-snapshots</id>
                 <username>${CENTRAL_PORTAL_USERNAME}</username>
                 <password>${CENTRAL_PORTAL_PASSWORD}</password>
               </server>
@@ -59,22 +59,19 @@ jobs:
           </settingsSecurity>
           EOF
 
-      - name: Import GPG key
-        env:
-          MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      # Snapshot：GPG 非强制，如果你想统一流程，可以保留
+      - name: Get project version
+        id: project_version
         run: |
-          # 导入 GPG 私钥（用于签名）
-          echo "$MAVEN_GPG_PRIVATE_KEY" | base64 --decode | gpg --batch --import
-          # 配置 GPG 使用 batch 模式
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          # 列出导入的 key（用于调试）
-          gpg --list-secret-keys --keyid-format LONG
-          # 注意：GPG 公钥已手动上传到 PGP 服务器，无需在此步骤中上传
+          version=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
-      - name: Build and deploy
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      - name: Build and deploy snapshot
+        if: endsWith(steps.project_version.outputs.version, '-SNAPSHOT')
         run: |
-          mvn -B -P release clean deploy
+          mvn -B clean deploy -DskipTests
+
+      - name: Skip deploy (version is not -SNAPSHOT)
+        if: ${{ !endsWith(steps.project_version.outputs.version, '-SNAPSHOT') }}
+        run: |
+          echo "Skip deploy: project.version=${{ steps.project_version.outputs.version }}"

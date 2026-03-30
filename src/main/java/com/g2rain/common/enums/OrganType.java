@@ -1,6 +1,8 @@
 package com.g2rain.common.enums;
 
 
+import com.g2rain.common.exception.BusinessException;
+import com.g2rain.common.exception.SystemErrorCode;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -163,14 +165,14 @@ public enum OrganType {
 
     /**
      * 存储 {@link OrganType} 类型与其字符串描述的映射关系。
-     * key: type 字符串值，例如 "公司"
+     * key: 枚举值字符串值，例如 "TENANT"
      * value: 对应的 OrganType 枚举对象
      */
     private static final Map<String, OrganType> VALUE_MAP = new HashMap<>();
 
     static {
         for (OrganType ot : OrganType.values()) {
-            VALUE_MAP.put(ot.type, ot);
+            VALUE_MAP.put(ot.name(), ot);
         }
     }
 
@@ -222,6 +224,50 @@ public enum OrganType {
         this.index = index;
     }
 
+    /**
+     * 根据给定的字符串名称校验该名称是否存在于枚举中。
+     * <p>
+     * 如果字符串名称对应的枚举不存在，则抛出参数值无效的异常。
+     * </p>
+     *
+     * @param name 枚举名称字符串，表示应用类型的名称。
+     * @throws BusinessException 如果指定的枚举名称无效，抛出此异常，表示参数值无效。
+     */
+    public static OrganType fromName(String name) {
+        OrganType organType = VALUE_MAP.get(name);
+        if (Objects.nonNull(organType)) {
+            return organType;
+        }
+
+        // 如果没有找到匹配的枚举，抛出业务异常
+        throw new BusinessException(
+            SystemErrorCode.PARAM_VAL_INVALID,
+            name
+        );
+    }
+
+    /**
+     * 安全地将字符串转换为 OrganType 枚举
+     * <p>
+     * 功能说明：
+     * <ul>
+     *   <li>当输入为空或仅包含空白字符时，返回 {@code null}</li>
+     *   <li>当输入不属于枚举定义的值时，返回 {@code null}</li>
+     *   <li>合法枚举值将返回对应的枚举实例</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * 该方法不会抛出 {@link IllegalArgumentException} 或 {@link NullPointerException}，
+     * 可安全用于外部输入或不可信数据。
+     * </p>
+     *
+     * @param name 待转换的字符串
+     * @return 对应的 OrganType 枚举实例，非法或空值返回 {@code null}
+     */
+    public static OrganType safeOf(String name) {
+        return VALUE_MAP.get(name);
+    }
 
     /**
      * 判断当前组织类型是否可以与目标类型建立层级关系。
@@ -262,22 +308,6 @@ public enum OrganType {
          * 无符号右移 高位总是填 0, 不考虑符号位
          */
         return ((RULE_MASK[arrayIndex] >>> bitIndex) & 1L) == 1L;
-    }
-
-    /**
-     * 根据描述字符串查找对应的 {@link OrganType} 枚举值。
-     * <p>
-     * <b>示例：</b>
-     * <pre>{@code
-     * OrganType type = OrganType.typeOf("公司");
-     * System.out.println(type); // 输出：COMPANY
-     * }</pre>
-     *
-     * @param type 描述字符串，例如 "公司"
-     * @return 对应的 {@link OrganType} 枚举对象，找不到返回 {@code null}
-     */
-    public static OrganType typeOf(String type) {
-        return VALUE_MAP.get(type);
     }
 
     /**

@@ -6,7 +6,7 @@
 
     <groupId>com.g2rain</groupId>
     <artifactId>g2rain-common</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>G2rain Common</name>
@@ -58,33 +58,31 @@
     <distributionManagement>
         <!-- Snapshot 仓库配置 -->
         <snapshotRepository>
-            <id>central</id>
-            <url>https://central.sonatype.com/content/repositories/snapshots</url>
+            <id>central-portal-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
         <!-- Release 仓库由 central-publishing-maven-plugin 自动处理，无需配置 -->
     </distributionManagement>
 
     <properties>
-        <jackson.databind.version>3.0.2</jackson.databind.version>
-        <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
-        <junit.jupiter.version>5.13.4</junit.jupiter.version>
-        <mockito.core.version>5.17.0</mockito.core.version>
-        <lombok.version>1.18.30</lombok.version>
+        <jackson.databind.version>3.0.4</jackson.databind.version>
+        <junit.jupiter.version>6.0.3</junit.jupiter.version>
+        <mockito.core.version>5.22.0</mockito.core.version>
+        <lombok.version>1.18.42</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
-        <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
-        <maven.enforcer.plugin.version>3.6.1</maven.enforcer.plugin.version>
+        <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>3.5.5</maven.surefire.plugin.version>
+        <maven.enforcer.plugin.version>3.6.2</maven.enforcer.plugin.version>
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
-        <maven.pmd.plugin.version>3.27.0</maven.pmd.plugin.version>
-        <spotbugs.maven.plugin.version>4.9.6.0</spotbugs.maven.plugin.version>
-        <jacoco.maven.plugin.version>0.8.13</jacoco.maven.plugin.version>
-        <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
+        <maven.pmd.plugin.version>3.28.0</maven.pmd.plugin.version>
+        <spotbugs.maven.plugin.version>4.9.8.2</spotbugs.maven.plugin.version>
+        <jacoco.maven.plugin.version>0.8.14</jacoco.maven.plugin.version>
+        <maven.source.plugin.version>3.4.0</maven.source.plugin.version>
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
         <flatten.maven.plugin.version>1.7.3</flatten.maven.plugin.version>
-        <maven.gpg.plugin.version>3.2.7</maven.gpg.plugin.version>
-        <central.publishing.maven.plugin.version>0.9.0</central.publishing.maven.plugin.version>
-        <maven.compiler.release>21</maven.compiler.release>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.gpg.plugin.version>3.2.8</maven.gpg.plugin.version>
+        <central.publishing.maven.plugin.version>0.10.0</central.publishing.maven.plugin.version>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -94,11 +92,6 @@
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.databind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>transmittable-thread-local</artifactId>
-            <version>${transmittable.thread.local.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -139,7 +132,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
-                    <!-- 指定目标Java版本(如21), 替代传统的<source>和<target>, 确保字节码与指定版本兼容 -->
+                    <!-- 指定目标Java版本(如25), 替代传统的<source>和<target>, 确保字节码与指定版本兼容 -->
                     <release>${maven.compiler.release}</release>
                     <!-- 指定编码格式 -->
                     <encoding>${project.build.sourceEncoding}</encoding>
@@ -189,9 +182,9 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <!-- 指定必须使用 JDK 21 -->
+                                <!-- 指定必须使用 JDK 25 -->
                                 <requireJavaVersion>
-                                    <version>[21,)</version>
+                                    <version>[25,)</version>
                                 </requireJavaVersion>
                                 <!-- 检查依赖冲突 -->
                                 <requireUpperBoundDeps/>
@@ -208,7 +201,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven.checkstyle.plugin.version}</version>
                 <configuration>
-                    <!-- 使用Google代码检查规范 -->
+                    <!-- 使用 Google 代码检查规范 -->
                     <configLocation>google_checks.xml</configLocation>
                     <!-- 在控制台输出结果 -->
                     <consoleOutput>true</consoleOutput>
@@ -236,7 +229,7 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${spotbugs.maven.plugin.version}</version>
                 <configuration>
-                    <!-- 出现bug时构建失败 -->
+                    <!-- 出现 bug 时构建失败 -->
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
@@ -252,7 +245,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <!-- 准备JaCoCo运行时代理 -->
+                            <!-- 准备 JaCoCo 运行时代理 -->
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
@@ -288,10 +281,12 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven.javadoc.plugin.version}</version>
                 <configuration>
-                    <release>${maven.compiler.target}</release>
+                    <release>${maven.compiler.release}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <doclint>none</doclint>
-                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <additionalOptions>
+                        <additionalOption>-Xdoclint:none</additionalOption>
+                    </additionalOptions>
                 </configuration>
                 <executions>
                     <execution>
@@ -342,7 +337,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.7</version>
+                        <version>${maven.gpg.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

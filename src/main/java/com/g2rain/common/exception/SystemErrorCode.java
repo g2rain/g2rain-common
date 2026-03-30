@@ -87,9 +87,9 @@ public enum SystemErrorCode implements ErrorCode {
 
     /**
      * 权限不足（如普通用户访问管理员接口）
-     * 示例：{0:role}, {1:resource} → "普通用户", "用户管理" → "权限不足：普通用户无法访问用户管理资源"
+     * 示例：{0:role}→ "普通用户", "用户管理" → "权限不足：普通用户无法访问用户管理资源"
      */
-    UNAUTHORIZED("system.40301", "权限不足：{0:role}无法访问{1:resource}资源"),
+    UNAUTHORIZED("system.40301", "权限不足：{0:role}无法访问资源"),
 
     // ===================== 服务器错误（50000-59999）=====================
     /**
@@ -149,7 +149,12 @@ public enum SystemErrorCode implements ErrorCode {
     /**
      * 修改失败
      */
-    UPDATE_DATA_ERROR("system.50011", "ID：{0:id} 修改失败");
+    UPDATE_DATA_ERROR("system.50011", "ID：{0:id} 修改失败"),
+
+    /**
+     * 数据已存在
+     */
+    DATA_EXISTS("system.50012", "数据已存在");
 
     private final String code;
 

@@ -1,7 +1,6 @@
 package com.g2rain.common.web;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.g2rain.common.enums.OrganType;
 import com.g2rain.common.enums.SessionType;
 import com.g2rain.common.utils.Strings;
@@ -11,6 +10,10 @@ import lombok.Setter;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -40,59 +43,53 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 public class PrincipalContext extends BasePrincipal {
-    /**
-     * 当前请求的 acceptLanguage
-     */
-    private String acceptLanguage;
 
     /**
      * 网关跟踪标识
      * <p>用于链路追踪，便于日志收集和问题定位。</p>
      */
-    @JsonProperty(value = "trace_id")
     private String traceId;
 
     /**
      * 前端请求标识
      * <p>唯一标识一次请求，方便追踪和调试。</p>
      */
-    @JsonProperty(value = "request_id")
     private String requestId;
 
     /**
      * 前端请求时间
      * <p>请求发起时间戳，用于性能统计和延迟分析。</p>
      */
-    @JsonProperty(value = "request_time")
     private String requestTime;
 
     /**
-     * 应用标识
-     * <p>当 {@link #sessionType} 为 {@link SessionType#APP} 时有效。</p>
+     * 当前请求的 acceptLanguage
      */
-    @JsonProperty(value = "application_id")
-    private String applicationId;
-
-    /**
-     * 应用所属组织
-     * <p>当 {@link #sessionType} 为 {@link SessionType#APP} 时有效，标识应用所属的组织。</p>
-     */
-    @JsonProperty(value = "application_organ_id")
-    private String applicationOrganId;
+    private String acceptLanguage;
 
     /**
      * 调试日志输出级别标记位
      * <p>用于控制是否开启调试日志输出。</p>
      */
-    @JsonProperty(value = "debug")
     private boolean debug;
 
     /**
      * 后端发起请求标记位
      * <p>标识该请求为后端发起，可跳过部分数据权限校验。</p>
      */
-    @JsonProperty(value = "back_end")
     private boolean backEnd;
+
+    /**
+     * 请求来源应用标识
+     * <p>表示当前接口调用是由哪个应用发起的</p>
+     */
+    private Long applicationId;
+
+    /**
+     * 请求来源应用所属机构标识
+     * <p>表示发起当前接口调用的应用所隶属的机构</p>
+     */
+    private Long applicationOrganId;
 
     /**
      * 创建一个空的 {@code PrincipalContext} 对象。
@@ -104,48 +101,11 @@ public class PrincipalContext extends BasePrincipal {
     }
 
     /**
-     * 获取会话类型的字符串表示。
-     *
-     * @return 会话类型字符串，如果会话类型为空返回 {@code null}
+     * 如果没有传递应用标识, 视为后端发起请求标记位
+     * @return 后端发起请求标记位
      */
-    public String getSessionTypeStr() {
-        return Objects.toString(sessionType, null);
-    }
-
-    /**
-     * 获取组织类型的字符串表示。
-     *
-     * @return 组织类型字符串，如果组织类型为空返回 {@code null}
-     */
-    public String getOrganTypeStr() {
-        return Objects.toString(organType, null);
-    }
-
-    /**
-     * 获取租户标识。
-     *
-     * @return 如果组织类型为租户类型则返回组织 ID，否则返回 {@code null}
-     */
-    public String getTenantId() {
-        return OrganType.isTenant(this.organType) ? this.organId : null;
-    }
-
-    /**
-     * 获取公司标识。
-     *
-     * @return 如果组织类型为公司类型则返回组织 ID，否则返回 {@code null}
-     */
-    public String getCompanyId() {
-        return OrganType.isCompany(this.organType) ? this.organId : null;
-    }
-
-    /**
-     * 判断是否为开发者请求。
-     *
-     * @return {@code true} 表示当前请求为开发者请求
-     */
-    public boolean isDeveloper() {
-        return Strings.isNotBlank(getUserId()) && Strings.isNotBlank(getApplicationOrganId());
+    public boolean isBackEnd() {
+        return Objects.isNull(this.applicationId);
     }
 
     /**
@@ -156,30 +116,24 @@ public class PrincipalContext extends BasePrincipal {
      */
     public String getValue(PrincipalHeaders headerKey) {
         return switch (headerKey) {
-            case ACCEPT_LANGUAGE -> this.acceptLanguage;
             case CLIENT_ID -> this.clientId;
             case TRACE_ID -> this.traceId;
             case REQUEST_ID -> this.requestId;
             case REQUEST_TIME -> this.requestTime;
-            case SESSION_TYPE -> getSessionTypeStr();
-            case PASSPORT_ID -> this.passportId;
-            case USER_ID -> this.userId;
+            case DEBUG -> String.valueOf(this.debug);
+            case ACCEPT_LANGUAGE -> this.acceptLanguage;
+            case SESSION_TYPE -> toStrOrNull(this.sessionType);
+            case PASSPORT_ID -> toStrOrNull(this.passportId);
+            case USER_ID -> toStrOrNull(this.userId);
             case NAME -> this.name;
             case ADMIN_USER -> String.valueOf(this.adminUser);
-            case ORGAN_TYPE -> getOrganTypeStr();
-            case ORGAN_ID -> this.organId;
-            case ORGAN_NAME -> {
-                if (Strings.isNotBlank(this.organName)) {
-                    yield URLDecoder.decode(this.organName, StandardCharsets.UTF_8);
-                } else {
-                    yield null;
-                }
-            }
+            case ORGAN_ID -> toStrOrNull(this.organId);
+            case TARGET_ORGAN_ID -> toStrOrNull(this.targetOrganId);
+            case ORGAN_NAME -> safeDecode(this.organName);
+            case ORGAN_TYPE -> toStrOrNull(this.organType);
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
-            case APP_ID -> this.applicationId;
-            case APP_ORGAN_ID -> this.applicationOrganId;
-            case DEBUG -> String.valueOf(this.debug);
-            case BACK_END -> String.valueOf(this.backEnd);
+            case APP_ID -> toStrOrNull(this.applicationId);
+            case APP_ORGAN_ID -> toStrOrNull(this.applicationOrganId);
             case null -> null;
         };
     }
@@ -196,26 +150,179 @@ public class PrincipalContext extends BasePrincipal {
         }
 
         switch (headerKey) {
-            case ACCEPT_LANGUAGE -> this.acceptLanguage = value;
             case CLIENT_ID -> this.clientId = value;
             case TRACE_ID -> this.traceId = value;
             case REQUEST_ID -> this.requestId = value;
             case REQUEST_TIME -> this.requestTime = value;
-            case SESSION_TYPE -> this.sessionType = Strings.isNotBlank(value) ? SessionType.valueOf(value) : null;
-            case PASSPORT_ID -> this.passportId = value;
-            case USER_ID -> this.userId = value;
+            case DEBUG -> this.debug = Boolean.parseBoolean(value);
+            case ACCEPT_LANGUAGE -> this.acceptLanguage = value;
+            // 这个地方没有做任何非空和合法性校验 是因为, 这个值如果非法说明是被攻击或者存在bug, 需要修复
+            case SESSION_TYPE -> this.sessionType = SessionType.valueOf(value);
+            case PASSPORT_ID -> this.passportId = parseLongOrNull(value);
+            case USER_ID -> this.userId = parseLongOrNull(value);
             case NAME -> this.name = value;
-            case ADMIN_USER -> this.adminUser = Strings.isBlank(value) ? Boolean.FALSE : Boolean.parseBoolean(value);
-            case ORGAN_TYPE -> this.organType = Strings.isNotBlank(value) ? OrganType.valueOf(value) : null;
-            case ORGAN_ID -> this.organId = value;
+            case ADMIN_USER -> this.adminUser = Boolean.parseBoolean(value);
+            case ORGAN_TYPE -> this.organType = OrganType.safeOf(value);
+            case ORGAN_ID -> this.organId = parseLongOrNull(value);
             case ORGAN_NAME -> this.organName = value;
-            case ADMIN_COMPANY ->
-                this.adminCompany = Strings.isBlank(value) ? Boolean.FALSE : Boolean.parseBoolean(value);
-            case APP_ID -> this.applicationId = value;
-            case APP_ORGAN_ID -> this.applicationOrganId = value;
-            case DEBUG -> this.debug = Strings.isBlank(value) ? Boolean.FALSE : Boolean.parseBoolean(value);
-            case BACK_END -> this.backEnd = Strings.isBlank(value) ? Boolean.FALSE : Boolean.parseBoolean(value);
+            case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
+            case TARGET_ORGAN_ID -> this.targetOrganId = parseLongOrNull(value);
+            case APP_ID -> this.applicationId = parseLongOrNull(value);
+            case APP_ORGAN_ID -> this.applicationOrganId = parseLongOrNull(value);
             default -> { /* 什么都不做 */ }
+        }
+    }
+
+    /**
+     * 从当前 {@link PrincipalContext} 获取所有需要透传到 Feign 请求的 Header 信息。
+     *
+     * <p>具体行为：</p>
+     * <ul>
+     *     <li>Boolean 类型字段（如 adminUser、adminCompany、debug、backEnd）转换为字符串 "true"/"false"</li>
+     *     <li>Long 类型字段（如 passportId、userId、organId、applicationId、applicationOrganId）转换为字符串</li>
+     *     <li>枚举类型字段（如 sessionType、organType）使用枚举名称作为字符串</li>
+     *     <li>其他 String 类型字段（如 clientId、name、organName、traceId、requestId、requestTime、acceptLanguage）直接使用原值</li>
+     *     <li>仅在值非 null 或非空时才加入 Map，避免空值覆盖 Header</li>
+     * </ul>
+     *
+     * @return 包含所有需要透传的 Header 的 Map，其中 Key 为 Header 名，Value 为单元素集合
+     */
+    public Map<String, Collection<String>> getHeaders() {
+        Map<String, Collection<String>> headers = new HashMap<>();
+        headers.put(PrincipalHeaders.ADMIN_USER.getUpper(), List.of(Boolean.toString(this.adminUser)));
+        headers.put(PrincipalHeaders.ADMIN_COMPANY.getUpper(), List.of(Boolean.toString(this.adminCompany)));
+        headers.put(PrincipalHeaders.DEBUG.getUpper(), List.of(Boolean.toString(this.debug)));
+
+        if (Strings.isNotBlank(this.clientId)) {
+            headers.put(PrincipalHeaders.CLIENT_ID.getUpper(), List.of(this.clientId));
+        }
+
+        if (Objects.nonNull(this.sessionType)) {
+            headers.put(PrincipalHeaders.SESSION_TYPE.getUpper(), List.of(this.sessionType.name()));
+        }
+
+        if (Objects.nonNull(this.passportId)) {
+            headers.put(PrincipalHeaders.PASSPORT_ID.getUpper(), List.of(String.valueOf(this.passportId)));
+        }
+
+        if (Objects.nonNull(this.userId)) {
+            headers.put(PrincipalHeaders.USER_ID.getUpper(), List.of(String.valueOf(this.userId)));
+        }
+
+        if (Strings.isNotBlank(this.name)) {
+            headers.put(PrincipalHeaders.NAME.getUpper(), List.of(this.name));
+        }
+
+        if (Objects.nonNull(this.organId)) {
+            headers.put(PrincipalHeaders.ORGAN_ID.getUpper(), List.of(String.valueOf(this.organId)));
+        }
+
+        if (Strings.isNotBlank(this.organName)) {
+            headers.put(PrincipalHeaders.ORGAN_NAME.getUpper(), List.of(this.organName));
+        }
+
+        if (Objects.nonNull(this.organType)) {
+            headers.put(PrincipalHeaders.ORGAN_TYPE.getUpper(), List.of(this.organType.name()));
+        }
+
+        if (Strings.isNotBlank(this.traceId)) {
+            headers.put(PrincipalHeaders.TRACE_ID.getUpper(), List.of(this.traceId));
+        }
+
+        if (Strings.isNotBlank(this.requestId)) {
+            headers.put(PrincipalHeaders.REQUEST_ID.getUpper(), List.of(this.requestId));
+        }
+
+        if (Strings.isNotBlank(this.requestTime)) {
+            headers.put(PrincipalHeaders.REQUEST_TIME.getUpper(), List.of(this.requestTime));
+        }
+
+        if (Strings.isNotBlank(this.acceptLanguage)) {
+            headers.put(PrincipalHeaders.ACCEPT_LANGUAGE.getUpper(), List.of(this.acceptLanguage));
+        }
+
+        if (Objects.nonNull(this.applicationId)) {
+            headers.put(PrincipalHeaders.APP_ID.getUpper(), List.of(String.valueOf(this.applicationId)));
+        }
+
+        if (Objects.nonNull(this.applicationOrganId)) {
+            headers.put(PrincipalHeaders.APP_ORGAN_ID.getUpper(), List.of(String.valueOf(this.applicationOrganId)));
+        }
+
+        if (Objects.nonNull(this.targetOrganId)) {
+            headers.put(PrincipalHeaders.TARGET_ORGAN_ID.getUpper(), List.of(String.valueOf(this.targetOrganId)));
+        }
+
+        return headers;
+    }
+
+    /**
+     * 安全地对字符串进行 URL 解码
+     * <p>
+     * 当传入字符串为空、仅包含空白字符时，返回 {@code null}；
+     * 否则使用 UTF-8 对字符串进行 URL 解码。
+     * </p>
+     *
+     * <p>
+     * 该方法不会抛出 {@link NullPointerException}，保证空值安全。
+     * </p>
+     *
+     * @param value 待解码的字符串
+     * @return 解码后的字符串，或者 {@code null}（如果输入为空或仅包含空白字符）
+     */
+    private String safeDecode(String value) {
+        if (Strings.isBlank(value)) {
+            return null;
+        }
+
+        return URLDecoder.decode(value,
+            StandardCharsets.UTF_8
+        );
+    }
+
+    /**
+     * 将对象安全地转换为字符串
+     * <p>
+     * 如果传入对象为 {@code null}，返回 {@code null}；
+     * 否则返回对象的 {@link Object#toString()} 结果。
+     * </p>
+     *
+     * <p>
+     * 该方法与 {@link Objects#toString(Object)} 类似，但默认值固定为 {@code null}，
+     * 避免返回字符串 "null"。
+     * </p>
+     *
+     * @param value 待转换的对象
+     * @return 对象的字符串表示，或 {@code null}（如果输入为 {@code null}）
+     */
+    private String toStrOrNull(Object value) {
+        return Objects.toString(value, null);
+    }
+
+    /**
+     * 将字符串解析为 {@link Long}，解析失败时返回 {@code null}
+     * <p>
+     * 当传入值为空、仅包含空白字符，或不符合 {@link Long} 的数值格式时，
+     * 本方法不会抛出异常，而是统一返回 {@code null}。
+     * </p>
+     *
+     * <p>
+     * 该方法遵循“尽力解析”的语义约定，
+     * 调用方可通过 {@code null} 判断解析是否成功。
+     * </p>
+     *
+     * @param value 待解析的字符串
+     * @return 解析成功返回对应的 {@link Long}，否则返回 {@code null}
+     */
+    private Long parseLongOrNull(String value) {
+        if (Strings.isBlank(value)) {
+            return null;
+        }
+
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 }

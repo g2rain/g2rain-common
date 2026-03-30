@@ -1,7 +1,6 @@
 package com.g2rain.common.web;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.g2rain.common.enums.OrganType;
 import com.g2rain.common.enums.SessionType;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import lombok.Setter;
  * <pre>{@code
  * BasePrincipal principal = new BasePrincipal();
  * principal.setSessionType(SessionType.USER);
- * principal.setUserId("user-123");
+ * principal.setUserId(123);
  * principal.setName("张三");
  * principal.setOrganType(OrganType.COMPANY);
  * principal.setOrganId("org-456");
@@ -43,62 +42,57 @@ public class BasePrincipal {
      * 会话类型
      * <p>标识当前会话类型，例如用户会话、应用会话等。</p>
      */
-    @JsonProperty(value = "session_type")
     protected SessionType sessionType;
 
     /**
      * 账号 ID
-     * <p>当 {@link #sessionType} 为 {@link SessionType#PASSPORT} 时有效。</p>
      */
-    @JsonProperty(value = "passport_id")
-    protected String passportId;
+    protected Long passportId;
 
     /**
      * 用户 ID
-     * <p>当 {@link #sessionType} 为 {@link SessionType#USER} 时有效。</p>
      */
-    @JsonProperty(value = "user_id")
-    protected String userId;
+    protected Long userId;
 
     /**
      * 真实姓名
      * <p>用于展示或身份确认。</p>
      */
-    @JsonProperty(value = "name")
     protected String name;
 
     /**
      * 公司内管理员标记位
      * <p>标识当前用户是否为管理员。</p>
      */
-    @JsonProperty(value = "admin_user")
     protected boolean adminUser;
-
-    /**
-     * 组织类型
-     * <p>标识当前用户所属组织类型。</p>
-     */
-    @JsonProperty(value = "organ_type")
-    protected OrganType organType;
 
     /**
      * 组织标识
      * <p>当前用户所属组织的唯一标识。</p>
      */
-    @JsonProperty(value = "organ_id")
-    protected String organId;
+    protected Long organId;
 
     /**
      * 组织名称
      * <p>当前用户所属组织的名称。</p>
      */
-    @JsonProperty(value = "organ_name")
     protected String organName;
+
+    /**
+     * 组织类型
+     * <p>标识当前用户所属组织类型。</p>
+     */
+    protected OrganType organType;
 
     /**
      * 平台管理组织标记位
      * <p>标识该组织是否为平台管理组织。</p>
      */
-    @JsonProperty(value = "admin_company")
     protected boolean adminCompany;
+
+    /**
+     * 数据操作的目标组织标识
+     * <p>数据操作的目标组织的唯一标识。</p>
+     */
+    protected Long targetOrganId;
 }

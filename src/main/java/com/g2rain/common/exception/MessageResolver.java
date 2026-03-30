@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * <p>设计原则：
  * <ul>
  *   <li>统一占位符格式为 {@code {index:key}}，方便模板解析</li>
- *   <li>利用 JDK 21 的 {@code Matcher.replaceAll(Function)} 优化性能</li>
+ *   <li>利用 JDK 25 的 {@code Matcher.replaceAll(Function)} 优化性能</li>
  *   <li>模板解析逻辑集中在私有方法 {@link #resolveTemplate(String, Function)} 中，方便复用</li>
  * </ul>
  *
@@ -64,7 +64,7 @@ import java.util.regex.Pattern;
  * // result4 = "用户王五的年龄是{1:age}岁"
  * }</pre>
  *
- * <p><b>JDK 21 特性说明：</b>
+ * <p><b>JDK 25 特性说明：</b>
  * <ul>
  *   <li>{@code Matcher.replaceAll(Function)} 替换占位符，性能更优</li>
  *   <li>正则编译模式静态缓存，避免重复编译</li>

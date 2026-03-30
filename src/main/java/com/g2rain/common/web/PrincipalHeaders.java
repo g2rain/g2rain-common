@@ -106,9 +106,9 @@ public enum PrincipalHeaders {
     DEBUG("X-DEBUG", "x-debug"),
 
     /**
-     * 后端发起请求标记位，用于标识该请求是后端发起，可跳过部分数据权限校验
+     * 数据操作的目标组织标识标识
      */
-    BACK_END("X-BACK-END", "x-back-end");
+    TARGET_ORGAN_ID("X-TARGET-ORGAN-ID", "x-target-organ-id");
 
     /**
      * 大写请求头字段名称

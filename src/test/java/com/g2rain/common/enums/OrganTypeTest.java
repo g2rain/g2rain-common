@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("组织类型枚举测试")
@@ -32,14 +31,6 @@ class OrganTypeTest {
     void testGetType() {
         assertEquals("公司", OrganType.COMPANY.getType());
         assertEquals("租户", OrganType.TENANT.getType());
-    }
-
-    @Test
-    @DisplayName("测试根据类型字符串查找枚举")
-    void testTypeOf() {
-        assertEquals(OrganType.COMPANY, OrganType.typeOf("公司"));
-        assertEquals(OrganType.TENANT, OrganType.typeOf("租户"));
-        assertNull(OrganType.typeOf("unknown"));
     }
 
     @Test

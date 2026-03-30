@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://search.maven.org/artifact/com.g2rain/g2rain-common)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Java Version](https://img.shields.io/badge/Java-21+-orange.svg)](https://openjdk.java.net/)
+[![Java Version](https://img.shields.io/badge/Java-25+-orange.svg)](https://openjdk.java.net/)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/g2rain/g2rain-common)
 
 > 企业级Java基础工具库，提供分布式系统开发的核心组件和实用工具
@@ -17,7 +17,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 - **分布式事件处理**：完整的事件发布、订阅、存储和分发机制
 - **消息存储管理**：支持多种数据源的消息存储注册与访问
 - **事件类型定义**：标准化的CREATE、UPDATE、DELETE事件类型
-- **线程安全设计**：基于TransmittableThreadLocal的线程安全实现
+- **线程安全设计**：基于 ScopedValue 的虚拟线程上下文传递机制实现
 
 ### 📄 JSON处理增强
 - **高精度序列化**：基于Jackson 3.0.2，保留数字原始格式
@@ -34,7 +34,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 ### 🌐 Web会话管理
 - **多身份类型**：支持USER、PASSPORT、APP、APP_TENANT等会话类型
 - **JWT处理**：TokenJWT和DPoP JWT的Header/Payload封装
-- **线程安全上下文**：基于TransmittableThreadLocal的会话上下文管理
+- **线程安全上下文**：基于 ScopedValue 的虚拟线程上下文传递机制的会话上下文管理
 - **标准请求头**：PrincipalHeaders定义标准化请求头字段
 
 ### 📊 通用数据模型
@@ -53,7 +53,7 @@ g2rain-common 是一个设计精良的企业级基础工具库，为Java开发�
 
 ### 环境要求
 
-- Java 21+
+- Java 25+
 - Maven 3.6+
 
 ### Maven 依赖

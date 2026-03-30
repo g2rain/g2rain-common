@@ -26,9 +26,4 @@ public final class Constants {
      * <p>可用于避免多次创建空数组，提升性能。</p>
      */
     public static final byte[] EMPTY_BYTE = new byte[0];
-
-    /**
-     * Jackson 序列化动态忽略字段的过滤器ID
-     */
-    public static final String CONDITIONAL_JSON_IGNORE_FILTER_ID = "conditionalFilter";
 }
