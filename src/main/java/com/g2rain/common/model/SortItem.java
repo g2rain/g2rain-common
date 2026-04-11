@@ -1,6 +1,6 @@
 package com.g2rain.common.model;
 
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,11 +24,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "单个排序条件, 用于多字段排序")
 public class SortItem {
 
     /**
      * 排序列名, 对应 DTO 属性或数据库字段
      */
+    @Schema(description = "排序列名")
     private String column;
 
     /**
@@ -36,11 +38,13 @@ public class SortItem {
      * <p>
      * 非法值可以通过 {@link Direction#safeOf(String)} 转换为默认值 ASC
      */
+    @Schema(description = "排序方向", allowableValues = {"ASC", "DESC"})
     private String direction;
 
     /**
      * 排序方向枚举, 用于方向校验和安全转换
      */
+    @Schema(description = "排序方向枚举, 用于方向校验和安全转换")
     public enum Direction {
         /**
          * 升序

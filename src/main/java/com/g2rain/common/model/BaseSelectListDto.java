@@ -2,6 +2,8 @@ package com.g2rain.common.model;
 
 import com.g2rain.common.utils.Collections;
 import com.g2rain.common.utils.Strings;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,7 @@ import java.util.Set;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "DTO 查询列表基础类")
 public class BaseSelectListDto {
 
     /**
@@ -37,6 +40,7 @@ public class BaseSelectListDto {
      */
     @Setter
     @Getter
+    @Schema(description = "主键")
     private Long id;
 
     /**
@@ -46,6 +50,10 @@ public class BaseSelectListDto {
      */
     @Setter
     @Getter
+    @ArraySchema(
+        arraySchema = @Schema(description = "主键集合"),
+        schema = @Schema(description = "主键", type = "integer", format = "int64")
+    )
     private Set<Long> ids;
 
     /**
@@ -58,6 +66,11 @@ public class BaseSelectListDto {
      */
     @Setter
     @Getter
+    @ArraySchema(
+        arraySchema = @Schema(description = "更新时间段, 格式通常为 yyyy-MM-dd HH:mm:ss"),
+        schema = @Schema(description = "时间边界", example = "2026-01-07 00:00:00"),
+        maxItems = 2
+    )
     private List<String> updateTime;
 
     /**
@@ -68,8 +81,14 @@ public class BaseSelectListDto {
      * </ul>
      * 格式按前端约定, 通常为 YYYY-MM-DD HH:mm:ss 字符串
      */
+
     @Setter
     @Getter
+    @ArraySchema(
+        arraySchema = @Schema(description = "创建时间段, 格式通常为 yyyy-MM-dd HH:mm:ss"),
+        schema = @Schema(description = "时间边界", example = "2026-01-07 00:00:00"),
+        maxItems = 2
+    )
     private List<String> createTime;
 
     /**
@@ -89,6 +108,10 @@ public class BaseSelectListDto {
      * </ul>
      */
     @Setter
+    @ArraySchema(
+        arraySchema = @Schema(description = "多字段排序参数"),
+        schema = @Schema(description = "排序项", example = "createTime desc")
+    )
     private List<String> sorts;
 
     /**

@@ -125,7 +125,7 @@ public class PrincipalContext extends BasePrincipal {
             case SESSION_TYPE -> toStrOrNull(this.sessionType);
             case PASSPORT_ID -> toStrOrNull(this.passportId);
             case USER_ID -> toStrOrNull(this.userId);
-            case NAME -> this.name;
+            case NAME -> safeDecode(this.name);
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
             case TARGET_ORGAN_ID -> toStrOrNull(this.targetOrganId);
