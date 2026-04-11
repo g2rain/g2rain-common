@@ -3,6 +3,7 @@ package com.g2rain.common.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.g2rain.common.exception.ErrorCode;
 import com.g2rain.common.exception.FieldError;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -16,6 +17,7 @@ import java.util.Objects;
  * 采用泛型动态指定data类型，支持存储消息参数用于日志输出
  */
 @Data
+@Schema(description = "响应结果封装类")
 public class Result<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -5815787587704294331L;
@@ -33,46 +35,55 @@ public class Result<T> implements Serializable {
     /**
      * 请求标识
      */
+    @Schema(description = "请求标识")
     private String requestId;
 
     /**
      * 请求时间
      */
+    @Schema(description = "请求时间")
     private String requestTime;
 
     /**
      * 状态码，200表示成功，500表示失败
      */
+    @Schema(description = "状态码", allowableValues = {"200", "500"})
     private int status;
 
     /**
      * 具体错误码，当status=500时有效
      */
+    @Schema(description = "具体错误码, 当 status=500 时有效")
     private String errorCode;
 
     /**
      * 错误信息描述
      */
+    @Schema(description = "具体错误信息, 当 status=500 时有效")
     private String errorMessage;
 
     /**
      * 变量的占位符
      */
+    @Schema(hidden = true)
     private transient Map<String, Object> keyArgs;
 
     /**
      * 错误消息的参数列表，用于日志输出和问题排查
      */
+    @Schema(hidden = true)
     private transient Object[] indexArgs;
 
     /**
      * 二级错误信息
      */
+    @Schema(hidden = true)
     private transient List<FieldError> fieldErrors;
 
     /**
      * 响应数据，类型由泛型T指定
      */
+    @Schema(description = "响应数据")
     private transient T data;
 
     /**

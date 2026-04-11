@@ -1,5 +1,6 @@
 package com.g2rain.common.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,23 +20,27 @@ import lombok.Setter;
  *
  * @author jagger
  */
+@Schema(description = "DTO 分页查询基础类")
 public class PageSelectListDto<T> {
     public static final int DEFAULT_PAGE_SIZE = 10;
 
     @Setter
     @Getter
+    @Schema(description = "业务查询条件对象")
     private T query;
 
     /**
      * 当前页码，最小页码为1
      */
     @Setter
+    @Schema(description = "当前页码", minimum = "1")
     private int pageNum;
 
     /**
      * 每页条数
      */
     @Setter
+    @Schema(description = "每页条数")
     private int pageSize;
 
     public int getPageNum() {

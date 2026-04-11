@@ -1,5 +1,6 @@
 package com.g2rain.common.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -12,6 +13,7 @@ import java.util.Objects;
  * 分页数据封装类
  */
 @Data
+@Schema(description = "分页数据封装类")
 public class PageData<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -9078642928025518913L;
@@ -19,26 +21,31 @@ public class PageData<T> implements Serializable {
     /**
      * 当前页码
      */
+    @Schema(description = "当前页码")
     private int pageNum;
 
     /**
      * 每页条数
      */
+    @Schema(description = "每页条数")
     private int pageSize;
 
     /**
      * 总记录数
      */
+    @Schema(description = "总记录数")
     private long total;
 
     /**
      * 总页数
      */
+    @Schema(description = "总页数")
     private int totalPages;
 
     /**
      * 数据列表
      */
+    @Schema(description = "数据列表")
     private transient List<T> records;
 
     /**
