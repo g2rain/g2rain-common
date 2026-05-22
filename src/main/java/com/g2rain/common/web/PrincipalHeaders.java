@@ -103,12 +103,7 @@ public enum PrincipalHeaders {
     /**
      * 调试日志输出级别标记位，用于控制调试日志输出，方便调试和排查
      */
-    DEBUG("X-DEBUG", "x-debug"),
-
-    /**
-     * 数据操作的目标组织标识标识
-     */
-    TARGET_ORGAN_ID("X-TARGET-ORGAN-ID", "x-target-organ-id");
+    DEBUG("X-DEBUG", "x-debug");
 
     /**
      * 大写请求头字段名称

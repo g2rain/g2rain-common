@@ -491,32 +491,6 @@ public final class PrincipalContextHolder {
         return principalContext.isAdminCompany();
     }
 
-
-    /**
-     * 设置 targetOrganId
-     */
-    public static void setTargetOrganId(Long targetOrganId) {
-        PrincipalContext principalContext = get();
-        if (Objects.isNull(principalContext)) {
-            return;
-        }
-
-        principalContext.setTargetOrganId(targetOrganId);
-    }
-
-    /**
-     * 获取 targetOrganId
-     */
-    public static Long getTargetOrganId() {
-        PrincipalContext principalContext = get();
-        if (Objects.isNull(principalContext)) {
-            return null;
-        }
-
-        return principalContext.getTargetOrganId();
-    }
-
-
     /**
      * 设置 applicationId
      */

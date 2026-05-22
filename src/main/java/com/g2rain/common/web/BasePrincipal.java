@@ -89,10 +89,4 @@ public class BasePrincipal {
      * <p>标识该组织是否为平台管理组织。</p>
      */
     protected boolean adminCompany;
-
-    /**
-     * 数据操作的目标组织标识
-     * <p>数据操作的目标组织的唯一标识。</p>
-     */
-    protected Long targetOrganId;
 }
