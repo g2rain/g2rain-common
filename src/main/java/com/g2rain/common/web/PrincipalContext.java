@@ -102,6 +102,7 @@ public class PrincipalContext extends BasePrincipal {
 
     /**
      * 如果没有传递应用标识, 视为后端发起请求标记位
+     *
      * @return 后端发起请求标记位
      */
     public boolean isBackEnd() {
@@ -128,7 +129,6 @@ public class PrincipalContext extends BasePrincipal {
             case NAME -> safeDecode(this.name);
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
-            case TARGET_ORGAN_ID -> toStrOrNull(this.targetOrganId);
             case ORGAN_NAME -> safeDecode(this.organName);
             case ORGAN_TYPE -> toStrOrNull(this.organType);
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
@@ -166,7 +166,6 @@ public class PrincipalContext extends BasePrincipal {
             case ORGAN_ID -> this.organId = parseLongOrNull(value);
             case ORGAN_NAME -> this.organName = value;
             case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
-            case TARGET_ORGAN_ID -> this.targetOrganId = parseLongOrNull(value);
             case APP_ID -> this.applicationId = parseLongOrNull(value);
             case APP_ORGAN_ID -> this.applicationOrganId = parseLongOrNull(value);
             default -> { /* 什么都不做 */ }
@@ -247,10 +246,6 @@ public class PrincipalContext extends BasePrincipal {
 
         if (Objects.nonNull(this.applicationOrganId)) {
             headers.put(PrincipalHeaders.APP_ORGAN_ID.getUpper(), List.of(String.valueOf(this.applicationOrganId)));
-        }
-
-        if (Objects.nonNull(this.targetOrganId)) {
-            headers.put(PrincipalHeaders.TARGET_ORGAN_ID.getUpper(), List.of(String.valueOf(this.targetOrganId)));
         }
 
         return headers;

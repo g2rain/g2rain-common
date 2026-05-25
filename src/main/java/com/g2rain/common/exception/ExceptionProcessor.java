@@ -2,7 +2,11 @@ package com.g2rain.common.exception;
 
 
 import com.g2rain.common.model.Result;
+import com.g2rain.common.utils.Moments;
+import com.g2rain.common.utils.Strings;
 import com.g2rain.common.web.PrincipalContextHolder;
+
+import java.util.UUID;
 
 /**
  * <p>{@code ExceptionProcessor} 接口用于定义业务异常的处理逻辑。</p>
@@ -42,11 +46,21 @@ public interface ExceptionProcessor {
      * @return 转换后的 {@link Result} 对象
      */
     default Result<Void> toResult(BusinessException ex) {
+        String requestId = PrincipalContextHolder.getRequestId();
+        if (Strings.isBlank(requestId)) {
+            requestId = UUID.randomUUID().toString();
+        }
+
+        String requestTime = PrincipalContextHolder.getRequestTime();
+        if (Strings.isBlank(requestTime)) {
+            requestTime = Moments.format(Moments.now());
+        }
+
         Result<Void> result = Result.error(ex.getErrorCode(), ex.getErrorMessage());
         result.setKeyArgs(ex.getKeyArgs());
         result.setIndexArgs(ex.getIndexArgs());
-        result.setRequestId(PrincipalContextHolder.getRequestId());
-        result.setRequestTime(PrincipalContextHolder.getRequestTime());
+        result.setRequestId(requestId);
+        result.setRequestTime(requestTime);
         result.setFieldErrors(ex.getFieldErrors());
         return result;
     }

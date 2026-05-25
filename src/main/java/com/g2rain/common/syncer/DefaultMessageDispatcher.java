@@ -88,9 +88,8 @@ public class DefaultMessageDispatcher implements MessageDispatcher {
      */
     private <K, V, T> void doDispatch(AbstractMessageStorage<K, V, T> ms, EventType eventType, String rawData) {
         try {
-            // 将数据转换为具体类型
-            V data = jsonCodec.str2obj(rawData, ms.getValueType());
-            // 如果数据转换失败，则跳过
+            Class<V> type = ms.getValueType();
+            V data = type == String.class ? type.cast(rawData) : jsonCodec.str2obj(rawData, type);
             if (Objects.isNull(data)) {
                 return;
             }
