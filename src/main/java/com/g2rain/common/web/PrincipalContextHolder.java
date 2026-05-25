@@ -108,6 +108,30 @@ public final class PrincipalContextHolder {
     }
 
     /**
+     * 设置 apiKey
+     */
+    public static void setApiKey(String apiKey) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.setApiKey(apiKey);
+    }
+
+    /**
+     * 获取 apiKey
+     */
+    public static String getApiKey() {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return null;
+        }
+
+        return principalContext.getApiKey();
+    }
+
+    /**
      * 设置 clientId
      */
     public static void setClientId(String clientId) {

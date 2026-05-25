@@ -101,6 +101,11 @@ public enum PrincipalHeaders {
     APP_ORGAN_ID("X-APP-ORGAN-ID", "x-app-organ-id"),
 
     /**
+     * 大模型密钥
+     */
+    API_KEY("X-API-KEY", "x-api-key"),
+
+    /**
      * 调试日志输出级别标记位，用于控制调试日志输出，方便调试和排查
      */
     DEBUG("X-DEBUG", "x-debug");

@@ -45,6 +45,12 @@ import java.util.Objects;
 public class PrincipalContext extends BasePrincipal {
 
     /**
+     * 大模型密钥
+     * <p>表示请求大模型的密钥</p>
+     */
+    private String apiKey;
+
+    /**
      * 网关跟踪标识
      * <p>用于链路追踪，便于日志收集和问题定位。</p>
      */
@@ -134,6 +140,7 @@ public class PrincipalContext extends BasePrincipal {
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
             case APP_ID -> toStrOrNull(this.applicationId);
             case APP_ORGAN_ID -> toStrOrNull(this.applicationOrganId);
+            case API_KEY -> this.apiKey;
             case null -> null;
         };
     }
@@ -168,6 +175,7 @@ public class PrincipalContext extends BasePrincipal {
             case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
             case APP_ID -> this.applicationId = parseLongOrNull(value);
             case APP_ORGAN_ID -> this.applicationOrganId = parseLongOrNull(value);
+            case API_KEY -> this.apiKey = value;
             default -> { /* 什么都不做 */ }
         }
     }
@@ -246,6 +254,10 @@ public class PrincipalContext extends BasePrincipal {
 
         if (Objects.nonNull(this.applicationOrganId)) {
             headers.put(PrincipalHeaders.APP_ORGAN_ID.getUpper(), List.of(String.valueOf(this.applicationOrganId)));
+        }
+
+        if (Strings.isNotBlank(this.apiKey)) {
+            headers.put(PrincipalHeaders.API_KEY.getUpper(), List.of(this.apiKey));
         }
 
         return headers;
