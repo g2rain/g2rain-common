@@ -11,7 +11,7 @@ class PrincipalHeadersTest {
     @Test
     @DisplayName("测试枚举值")
     void testEnumValues() {
-        assertEquals(17, PrincipalHeaders.values().length);
+        assertEquals(18, PrincipalHeaders.values().length);
     }
 
     @Test
