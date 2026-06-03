@@ -89,4 +89,10 @@ public class BasePrincipal {
      * <p>标识该组织是否为平台管理组织。</p>
      */
     protected boolean adminCompany;
+
+    /**
+     * 部门路径
+     * <p>部门的层级关系路径。</p>
+     */
+    protected String deptPath;
 }
