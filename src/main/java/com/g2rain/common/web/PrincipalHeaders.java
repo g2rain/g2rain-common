@@ -91,6 +91,11 @@ public enum PrincipalHeaders {
     ADMIN_COMPANY("X-ADMIN-COMPANY", "x-admin-company"),
 
     /**
+     * 部门路径, 当前用户所属部门
+     */
+    DEPT_PATH("X-DEPT-PATH", "x-dept-path"),
+
+    /**
      * 应用标识，标识调用方的应用 ID
      */
     APP_ID("X-APP-ID", "x-app-id"),
@@ -101,14 +106,14 @@ public enum PrincipalHeaders {
     APP_ORGAN_ID("X-APP-ORGAN-ID", "x-app-organ-id"),
 
     /**
-     * 调试日志输出级别标记位，用于控制调试日志输出，方便调试和排查
+     * 大模型密钥
      */
-    DEBUG("X-DEBUG", "x-debug"),
+    API_KEY("X-API-KEY", "x-api-key"),
 
     /**
-     * 数据操作的目标组织标识标识
+     * 调试日志输出级别标记位，用于控制调试日志输出，方便调试和排查
      */
-    TARGET_ORGAN_ID("X-TARGET-ORGAN-ID", "x-target-organ-id");
+    DEBUG("X-DEBUG", "x-debug");
 
     /**
      * 大写请求头字段名称

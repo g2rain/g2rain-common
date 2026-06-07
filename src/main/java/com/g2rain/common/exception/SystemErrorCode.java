@@ -154,7 +154,12 @@ public enum SystemErrorCode implements ErrorCode {
     /**
      * 数据已存在
      */
-    DATA_EXISTS("system.50012", "数据已存在");
+    DATA_EXISTS("system.50012", "数据已存在"),
+
+    /**
+     * 数据不存在
+     */
+    DATA_NOT_EXISTS("system.50013", "数据不存在");
 
     private final String code;
 

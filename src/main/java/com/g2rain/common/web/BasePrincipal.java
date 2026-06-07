@@ -91,8 +91,8 @@ public class BasePrincipal {
     protected boolean adminCompany;
 
     /**
-     * 数据操作的目标组织标识
-     * <p>数据操作的目标组织的唯一标识。</p>
+     * 部门路径
+     * <p>部门的层级关系路径。</p>
      */
-    protected Long targetOrganId;
+    protected String deptPath;
 }

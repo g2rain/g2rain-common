@@ -45,6 +45,12 @@ import java.util.Objects;
 public class PrincipalContext extends BasePrincipal {
 
     /**
+     * 大模型密钥
+     * <p>表示请求大模型的密钥</p>
+     */
+    private String apiKey;
+
+    /**
      * 网关跟踪标识
      * <p>用于链路追踪，便于日志收集和问题定位。</p>
      */
@@ -102,6 +108,7 @@ public class PrincipalContext extends BasePrincipal {
 
     /**
      * 如果没有传递应用标识, 视为后端发起请求标记位
+     *
      * @return 后端发起请求标记位
      */
     public boolean isBackEnd() {
@@ -128,12 +135,13 @@ public class PrincipalContext extends BasePrincipal {
             case NAME -> safeDecode(this.name);
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
-            case TARGET_ORGAN_ID -> toStrOrNull(this.targetOrganId);
             case ORGAN_NAME -> safeDecode(this.organName);
             case ORGAN_TYPE -> toStrOrNull(this.organType);
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
+            case DEPT_PATH -> this.deptPath;
             case APP_ID -> toStrOrNull(this.applicationId);
             case APP_ORGAN_ID -> toStrOrNull(this.applicationOrganId);
+            case API_KEY -> this.apiKey;
             case null -> null;
         };
     }
@@ -166,9 +174,10 @@ public class PrincipalContext extends BasePrincipal {
             case ORGAN_ID -> this.organId = parseLongOrNull(value);
             case ORGAN_NAME -> this.organName = value;
             case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
-            case TARGET_ORGAN_ID -> this.targetOrganId = parseLongOrNull(value);
+            case DEPT_PATH -> this.deptPath = value;
             case APP_ID -> this.applicationId = parseLongOrNull(value);
             case APP_ORGAN_ID -> this.applicationOrganId = parseLongOrNull(value);
+            case API_KEY -> this.apiKey = value;
             default -> { /* 什么都不做 */ }
         }
     }
@@ -225,6 +234,10 @@ public class PrincipalContext extends BasePrincipal {
             headers.put(PrincipalHeaders.ORGAN_TYPE.getUpper(), List.of(this.organType.name()));
         }
 
+        if (Objects.nonNull(this.deptPath)) {
+            headers.put(PrincipalHeaders.DEPT_PATH.getUpper(), List.of(this.deptPath));
+        }
+
         if (Strings.isNotBlank(this.traceId)) {
             headers.put(PrincipalHeaders.TRACE_ID.getUpper(), List.of(this.traceId));
         }
@@ -249,8 +262,8 @@ public class PrincipalContext extends BasePrincipal {
             headers.put(PrincipalHeaders.APP_ORGAN_ID.getUpper(), List.of(String.valueOf(this.applicationOrganId)));
         }
 
-        if (Objects.nonNull(this.targetOrganId)) {
-            headers.put(PrincipalHeaders.TARGET_ORGAN_ID.getUpper(), List.of(String.valueOf(this.targetOrganId)));
+        if (Strings.isNotBlank(this.apiKey)) {
+            headers.put(PrincipalHeaders.API_KEY.getUpper(), List.of(this.apiKey));
         }
 
         return headers;

@@ -108,6 +108,30 @@ public final class PrincipalContextHolder {
     }
 
     /**
+     * 设置 apiKey
+     */
+    public static void setApiKey(String apiKey) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.setApiKey(apiKey);
+    }
+
+    /**
+     * 获取 apiKey
+     */
+    public static String getApiKey() {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return null;
+        }
+
+        return principalContext.getApiKey();
+    }
+
+    /**
      * 设置 clientId
      */
     public static void setClientId(String clientId) {
@@ -491,31 +515,29 @@ public final class PrincipalContextHolder {
         return principalContext.isAdminCompany();
     }
 
-
     /**
-     * 设置 targetOrganId
+     * 设置 deptPath
      */
-    public static void setTargetOrganId(Long targetOrganId) {
+    public static void setDeptPath(String deptPath) {
         PrincipalContext principalContext = get();
         if (Objects.isNull(principalContext)) {
             return;
         }
 
-        principalContext.setTargetOrganId(targetOrganId);
+        principalContext.setDeptPath(deptPath);
     }
 
     /**
-     * 获取 targetOrganId
+     * 获取 deptPath
      */
-    public static Long getTargetOrganId() {
+    public static String getDeptPath() {
         PrincipalContext principalContext = get();
         if (Objects.isNull(principalContext)) {
             return null;
         }
 
-        return principalContext.getTargetOrganId();
+        return principalContext.getDeptPath();
     }
-
 
     /**
      * 设置 applicationId
