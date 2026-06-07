@@ -138,6 +138,7 @@ public class PrincipalContext extends BasePrincipal {
             case ORGAN_NAME -> safeDecode(this.organName);
             case ORGAN_TYPE -> toStrOrNull(this.organType);
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
+            case DEPT_PATH -> this.deptPath;
             case APP_ID -> toStrOrNull(this.applicationId);
             case APP_ORGAN_ID -> toStrOrNull(this.applicationOrganId);
             case API_KEY -> this.apiKey;
@@ -173,6 +174,7 @@ public class PrincipalContext extends BasePrincipal {
             case ORGAN_ID -> this.organId = parseLongOrNull(value);
             case ORGAN_NAME -> this.organName = value;
             case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
+            case DEPT_PATH -> this.deptPath = value;
             case APP_ID -> this.applicationId = parseLongOrNull(value);
             case APP_ORGAN_ID -> this.applicationOrganId = parseLongOrNull(value);
             case API_KEY -> this.apiKey = value;
@@ -230,6 +232,10 @@ public class PrincipalContext extends BasePrincipal {
 
         if (Objects.nonNull(this.organType)) {
             headers.put(PrincipalHeaders.ORGAN_TYPE.getUpper(), List.of(this.organType.name()));
+        }
+
+        if (Objects.nonNull(this.deptPath)) {
+            headers.put(PrincipalHeaders.DEPT_PATH.getUpper(), List.of(this.deptPath));
         }
 
         if (Strings.isNotBlank(this.traceId)) {
