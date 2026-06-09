@@ -10,6 +10,7 @@ import java.util.Objects;
  * <ul>
  *     <li>{@link #USER} — 用户登录 IoT 身份类型</li>
  *     <li>{@link #PASSPORT} — 账号登录 IoT 身份类型</li>
+ *     <li>{@link #ANONYMOUS} — 匿名访问身份类型</li>
  * </ul>
  * <p>
  * 提供了身份类型判断方法，方便业务逻辑快速识别会话类型。
@@ -35,7 +36,12 @@ public enum SessionType {
     /**
      * 账号登录
      */
-    PASSPORT;
+    PASSPORT,
+
+    /**
+     * 匿名
+     */
+    ANONYMOUS;
 
     /**
      * 判断给定会话类型是否为 {@link #USER}（用户登录身份）。
@@ -67,5 +73,15 @@ public enum SessionType {
      */
     public static boolean isPassport(SessionType sessionType) {
         return Objects.nonNull(sessionType) && PASSPORT == sessionType;
+    }
+
+    /**
+     * 判断给定会话类型是否为 {@link #ANONYMOUS}（匿名访问身份）。
+     *
+     * @param sessionType 待判断的会话类型
+     * @return {@code true} 如果是 {@link #ANONYMOUS} 类型，否则 {@code false}
+     */
+    public static boolean isAnonymous(SessionType sessionType) {
+        return Objects.nonNull(sessionType) && ANONYMOUS == sessionType;
     }
 }

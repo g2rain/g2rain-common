@@ -6,7 +6,7 @@
 
     <groupId>com.g2rain</groupId>
     <artifactId>g2rain-common</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
 
     <name>G2rain Common</name>
