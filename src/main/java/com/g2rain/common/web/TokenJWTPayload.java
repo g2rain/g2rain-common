@@ -19,6 +19,7 @@ import java.util.List;
  *     <li>{@link #refreshExpireAt}：刷新 Token 的过期时间（Unix 时间戳，单位秒）</li>
  *     <li>{@link #clientPublicKey}：客户端 DPoP 公钥，用于绑定 Token 和客户端</li>
  *     <li>{@link #applicationScopes}：应用作用域集合，用于鉴权判断请求所属应用权限</li>
+ *     <li>{@link #roleIds}：角色 ID 集合</li>
  * </ul>
  *
  * <p><b>使用示例：</b></p>
@@ -75,4 +76,9 @@ public class TokenJWTPayload extends BasePrincipal {
      * </p>
      */
     private List<ApplicationScope> applicationScopes;
+
+    /**
+     * 角色 ID 集合
+     */
+    private List<Long> roleIds;
 }
