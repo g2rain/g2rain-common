@@ -1,7 +1,6 @@
 package com.g2rain.common.exception;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,7 +29,7 @@ import java.util.Objects;
  * @author jagger
  * @since 2025/10/5
  */
-public class BusinessException extends RuntimeException implements Serializable {
+public class BusinessException extends RuntimeException {
 
     /**
      * <p>控制是否禁用堆栈跟踪的系统属性标志。</p>
