@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
@@ -132,10 +133,10 @@ public class PrincipalContext extends BasePrincipal {
             case SESSION_TYPE -> toStrOrNull(this.sessionType);
             case PASSPORT_ID -> toStrOrNull(this.passportId);
             case USER_ID -> toStrOrNull(this.userId);
-            case NAME -> safeDecode(this.name);
+            case NAME -> this.name;
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
-            case ORGAN_NAME -> safeDecode(this.organName);
+            case ORGAN_NAME -> this.organName;
             case ORGAN_TYPE -> toStrOrNull(this.organType);
             case ADMIN_COMPANY -> String.valueOf(this.adminCompany);
             case DEPT_PATH -> this.deptPath;
@@ -168,11 +169,11 @@ public class PrincipalContext extends BasePrincipal {
             case SESSION_TYPE -> this.sessionType = SessionType.valueOf(value);
             case PASSPORT_ID -> this.passportId = parseLongOrNull(value);
             case USER_ID -> this.userId = parseLongOrNull(value);
-            case NAME -> this.name = value;
+            case NAME -> this.name = safeDecode(value);
             case ADMIN_USER -> this.adminUser = Boolean.parseBoolean(value);
             case ORGAN_TYPE -> this.organType = OrganType.safeOf(value);
             case ORGAN_ID -> this.organId = parseLongOrNull(value);
-            case ORGAN_NAME -> this.organName = value;
+            case ORGAN_NAME -> this.organName = safeDecode(value);
             case ADMIN_COMPANY -> this.adminCompany = Boolean.parseBoolean(value);
             case DEPT_PATH -> this.deptPath = value;
             case APP_ID -> this.applicationId = parseLongOrNull(value);
@@ -219,7 +220,7 @@ public class PrincipalContext extends BasePrincipal {
         }
 
         if (Strings.isNotBlank(this.name)) {
-            headers.put(PrincipalHeaders.NAME.getUpper(), List.of(this.name));
+            headers.put(PrincipalHeaders.NAME.getUpper(), List.of(safeEncode(this.name)));
         }
 
         if (Objects.nonNull(this.organId)) {
@@ -227,7 +228,7 @@ public class PrincipalContext extends BasePrincipal {
         }
 
         if (Strings.isNotBlank(this.organName)) {
-            headers.put(PrincipalHeaders.ORGAN_NAME.getUpper(), List.of(this.organName));
+            headers.put(PrincipalHeaders.ORGAN_NAME.getUpper(), List.of(safeEncode(this.organName)));
         }
 
         if (Objects.nonNull(this.organType)) {
@@ -285,12 +286,44 @@ public class PrincipalContext extends BasePrincipal {
      */
     private String safeDecode(String value) {
         if (Strings.isBlank(value)) {
-            return null;
+            return value;
         }
 
-        return URLDecoder.decode(value,
-            StandardCharsets.UTF_8
-        );
+        try {
+            return URLDecoder.decode(value,
+                StandardCharsets.UTF_8
+            );
+        } catch (Exception e) {
+            return value;
+        }
+    }
+
+    /**
+     * 安全地对字符串进行 URL 编码
+     * <p>
+     * 当传入字符串为空、仅包含空白字符时，返回 {@code null}；
+     * 否则使用 UTF-8 对字符串进行 URL 编码。
+     * </p>
+     *
+     * <p>
+     * 该方法不会抛出 {@link NullPointerException}，保证空值安全。
+     * </p>
+     *
+     * @param value 待编码的字符串
+     * @return 编码后的字符串，或者 {@code null}（如果输入为空或仅包含空白字符）
+     */
+    private String safeEncode(String value) {
+        if (Strings.isBlank(value)) {
+            return value;
+        }
+
+        try {
+            return URLEncoder.encode(value,
+                StandardCharsets.UTF_8
+            );
+        } catch (Exception e) {
+            return value;
+        }
     }
 
     /**
