@@ -14,9 +14,10 @@ class SessionTypeTest {
     @Test
     @DisplayName("测试枚举值")
     void testEnumValues() {
-        assertEquals(2, SessionType.values().length);
+        assertEquals(3, SessionType.values().length);
         assertNotNull(SessionType.USER);
         assertNotNull(SessionType.PASSPORT);
+        assertNotNull(SessionType.ANONYMOUS);
     }
 
     @Test
@@ -24,6 +25,7 @@ class SessionTypeTest {
     void testEnumValueOf() {
         assertEquals(SessionType.USER, SessionType.valueOf("USER"));
         assertEquals(SessionType.PASSPORT, SessionType.valueOf("PASSPORT"));
+        assertEquals(SessionType.ANONYMOUS, SessionType.valueOf("ANONYMOUS"));
     }
 
     @Test
@@ -39,5 +41,13 @@ class SessionTypeTest {
         assertTrue(SessionType.isPassport(SessionType.PASSPORT));
         assertFalse(SessionType.isPassport(SessionType.USER));
         assertFalse(SessionType.isPassport(null));
+    }
+
+    @Test
+    @DisplayName("测试匿名会话类型判断")
+    void testIsAnonymous() {
+        assertTrue(SessionType.isAnonymous(SessionType.ANONYMOUS));
+        assertFalse(SessionType.isAnonymous(SessionType.USER));
+        assertFalse(SessionType.isAnonymous(null));
     }
 }

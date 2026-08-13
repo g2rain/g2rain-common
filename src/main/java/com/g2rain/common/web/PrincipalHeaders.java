@@ -91,6 +91,11 @@ public enum PrincipalHeaders {
     ADMIN_COMPANY("X-ADMIN-COMPANY", "x-admin-company"),
 
     /**
+     * 部门路径, 当前用户所属部门
+     */
+    DEPT_PATH("X-DEPT-PATH", "x-dept-path"),
+
+    /**
      * 应用标识，标识调用方的应用 ID
      */
     APP_ID("X-APP-ID", "x-app-id"),

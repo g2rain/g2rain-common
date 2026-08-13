@@ -516,6 +516,30 @@ public final class PrincipalContextHolder {
     }
 
     /**
+     * 设置 deptPath
+     */
+    public static void setDeptPath(String deptPath) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.setDeptPath(deptPath);
+    }
+
+    /**
+     * 获取 deptPath
+     */
+    public static String getDeptPath() {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return null;
+        }
+
+        return principalContext.getDeptPath();
+    }
+
+    /**
      * 设置 applicationId
      */
     public static void setApplicationId(Long applicationId) {
