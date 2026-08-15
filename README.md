@@ -1,195 +1,235 @@
-﻿<p align="center">
-  <img src="https://github.com/g2rain.png" alt="G2Rain" width="180" />
-</p>
-
 # g2rain-common
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-25-437291?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Maven](https://img.shields.io/badge/build-Maven-C71A36?logo=apachemaven&logoColor=white)](https://maven.apache.org/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://search.maven.org/artifact/com.g2rain/g2rain-common)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Java Version](https://img.shields.io/badge/Java-25+-orange.svg)](https://openjdk.java.net/)
+[![Build Status](https://img.shields.io/badge/build-Maven-C71A36?logo=apachemaven&logoColor=white)](https://github.com/g2rain/g2rain-common)
 
-下一代AI软件开发范式，AI原生Agent平台，开源的企业级SaaS底座。
+## 1. 徽标与状态标识
 
-g2rain 后端公共规范组件，沉淀平台后端通用模型、工具方法、异常规范与工程公共约定；作为平台后端研发支撑层被多个 g2rain 服务复用
+- 当前版本通过 `Maven Central` 发布
+- 当前运行时要求 `Java 25+`
+- 当前构建方式以 `Maven` 为准
+- 当前开源许可证为 `Apache 2.0`
 
-[官网](https://www.g2rain.com) · [Issues](https://github.com/g2rain/g2rain/issues) · [Discussions](https://github.com/g2rain/g2rain/discussions)
+## 2. 项目简介
 
-## 目录
+`g2rain-common` 是 G2rain 平台的 Java 公共基础库，用于沉淀多个 Java 仓库共享的基础能力。它统一提供通用模型、异常规范、JSON 编解码增强、事件同步抽象、主体上下文与 JWT / DPoP 安全模型、校验分组和常用工具能力，为平台服务、增强组件和工程化仓库提供一致的公共底座。
 
-- 项目简介
-- 平台定位
-- 业务域说明
-- 功能概览
-- 使用场景
-- 核心流程
-- 流程图
-- 技术栈
-- 环境要求
-- 快速开始
-- 构建与镜像
-- 代码质量与测试
-- 依赖引入
-- 安全说明
-- 与关联仓库的关系
-- 模块说明
-- 职责边界
-- 常见问题
-- 关联仓库
-- 参与贡献
-- 许可证
-- 联系我们
-- 致谢
+## 3. 平台定位
 
-## 项目简介
+`g2rain-common` 位于 G2rain 平台公共基础能力层，是多个 Java 仓库的底层共享依赖。  
+它主要服务于平台核心后端服务、平台增强组件以及工程化 Starter / 脚手架相关仓库。  
+它不是独立运行服务，也不承载具体业务逻辑，而是承载跨仓库统一复用的协议、模型、异常、上下文和工具能力。
 
-g2rain 后端公共规范组件，沉淀平台后端通用模型、工具方法、异常规范与工程公共约定；作为平台后端研发支撑层被多个 g2rain 服务复用
+## 4. 核心能力
 
-## 平台定位
+- 统一异常与错误码体系：`BusinessException`、`ErrorCode`、`SystemErrorCode`、异常转换与本地化消息能力
+- 通用结果与分页模型：`Result`、`PageData`、`PageSelectListDto`、基础 DTO / PO / VO
+- JSON 编解码增强：`JsonCodec`、条件字段序列化、数字精度保留
+- 事件同步抽象：事件发布、消息分发、消息存储注册与事件模型
+- 主体上下文与安全模型：`PrincipalContext`、请求头约定、Token / DPoP JWT 模型
+- 校验与分组能力：创建/更新分组、统一校验辅助
+- 平台通用枚举与接口约定：会话类型、组织类型、ID 生成器、对象转换接口
+- 常用工具集合：断言、字符串、集合、时间、数值、媒体类型等
 
-该仓库位于 g2rain 后端研发支撑层，为多个后端项目提供集成能力、工程化工具或共享扩展。
+## 5. 技术栈
 
-## 业务域说明
+- 语言与运行时：`Java 25`
+- 构建工具：`Maven`
+- 打包方式：`jar`
+- 核心依赖：`jackson-databind`、`mapstruct`、`swagger-annotations-jakarta`、`jakarta.validation-api`
+- 测试框架：`JUnit Jupiter`、`Mockito`
+- 质量工具：`Checkstyle`、`PMD`、`SpotBugs`、`JaCoCo`
+- 发布目标：`Maven Central / Sonatype Central Portal`
 
-该仓库聚焦于 `后端公共模型、通用规范、基础抽象与跨服务复用能力`。
+## 6. 快速开始
 
-## 功能概览
+### 环境要求
 
-| 能力 | 说明 |
-| --- | --- |
-| 公共模型与规范 | 提供后端服务共享的数据模型、异常结构、响应约定、工具类或基础抽象。 |
-| 跨服务复用 | 作为多个后端仓库的基础依赖，降低平台服务之间的重复实现。 |
+- `JDK 25`
+- `Maven 3.6+`
 
-## 使用场景
+### Maven 依赖
 
-| 场景 | 说明 |
-| --- | --- |
-| 共享后端公共能力 | 当平台服务需要统一响应、异常、基础模型、工具方法或公共抽象时引入。 |
-| 减少跨服务重复实现 | 当多个服务存在重复基础代码时，将能力沉淀到公共组件并统一复用。 |
-
-## 核心流程
-
-| 流程 | 关键步骤 | 代码线索 |
-| --- | --- | --- |
-| 公共组件复用流程 | 后端服务引入公共组件依赖 → 复用模型、异常、响应或工具抽象 → 业务服务按平台约定实现自身逻辑 → 跨服务保持一致的基础行为 | pom.xml、shared packages、common utility/model classes |
-
-## 流程图
-
-```mermaid
-flowchart TD
-  A[平台后端服务] --> B[引入公共组件依赖]
-  B --> C[复用公共模型/工具/规范]
-  C --> D[实现具体业务逻辑]
-  D --> E[保持跨服务一致性]
+```xml
+<dependency>
+    <groupId>com.g2rain</groupId>
+    <artifactId>g2rain-common</artifactId>
+    <version>1.0.6</version>
+</dependency>
 ```
 
-## 技术栈
+### 本地构建
 
-| 类别 | 说明 |
-| --- | --- |
-| 运行时 | Java 25 |
-| 其他 | Lombok |
+```bash
+mvn clean package
+```
 
-## 环境要求
+### 本地测试
 
-- JDK 25+
-- Maven 3.9+
+```bash
+mvn test
+```
 
-## 快速开始
+### 发布说明
 
-| 步骤 | 命令或位置 | 说明 |
-| --- | --- | --- |
-| 准备构建环境 | JDK 25+、Maven 3.9+ | 工具组件通常只需要 Java 与 Maven 构建环境。 |
-| 构建组件 | `mvn clean package` | 执行 Maven 构建，生成可发布或可本地安装的组件产物。 |
-| 本地安装 | `mvn clean install` | 安装到本地 Maven 仓库，便于业务工程试用依赖。 |
+- 正式版通过 Git Tag 触发 `release.yml`
+- `develop` 分支上的 `-SNAPSHOT` 版本可通过 `snapshot.yml` 发布
+- Release 流程包含源码包、Javadoc 包和 GPG 签名
 
-版本号以项目构建配置为准，当前识别为 `1.0.7`。
+## 7. 项目结构
 
-## 构建与镜像
+```text
+g2rain-common/
+├── .github/workflows/
+│   ├── release.yml
+│   └── snapshot.yml
+├── src/main/java/com/g2rain/common/
+│   ├── converter
+│   ├── enums
+│   ├── exception
+│   ├── id
+│   ├── json
+│   ├── model
+│   ├── syncer
+│   ├── utils
+│   ├── validation
+│   └── web
+├── src/test/java/com/g2rain/common/
+└── pom.xml
+```
 
-| 目标 | 命令 | 产物 | 说明 |
-| --- | --- | --- | --- |
-| 组件产物 | `mvn clean package` | `g2rain-common-1.0.7.jar` | 执行 Maven 标准构建，生成可发布的公共库组件产物。 |
-| 本地 Maven 安装 | `mvn clean install` | `本地 Maven 仓库产物` | 安装到本地 Maven 仓库，便于业务工程本地验证依赖。 |
+### 核心能力结构说明
 
-## 代码质量与测试
+#### 1. 统一异常与结果协议
 
-| 检查项 | 命令 | 说明 |
-| --- | --- | --- |
-| Maven Enforcer | `mvn validate` | 约束 JDK 版本、Maven 版本与依赖规则。 |
-| Checkstyle | `mvn checkstyle:check` | 检查 Java 代码风格与组织规范。 |
-| PMD | `mvn pmd:check` | 执行静态规则检查，识别潜在代码问题。 |
-| SpotBugs | `mvn spotbugs:check` | 识别潜在缺陷和风险代码。 |
-| JaCoCo | `mvn test jacoco:report` | 运行测试并生成覆盖率报告。 |
+- `exception` 包负责异常、错误码、消息模板、本地化消息和异常转换
+- `model` 包负责统一返回结构、分页结构和基础 DTO / PO / VO
+- 这两部分共同构成平台后端统一接口协议的基础
 
-## 依赖引入
+典型用法：
 
-| 构建工具 | 配置 | 说明 |
-| --- | --- | --- |
-| Maven | `<dependency><groupId>com.g2rain</groupId><artifactId>g2rain-common</artifactId><version>1.0.7</version></dependency>` | 在业务工程 pom.xml 中引入该组件。 |
+```java
+throw new BusinessException(SystemErrorCode.PARAM_REQUIRED, "tenantId");
 
-## 安全说明
+Result<String> success = Result.success("ok");
+Result<Void> error = Result.error("BIZ_ERROR", "invalid request");
+```
 
-| 主题 | 说明 |
-| --- | --- |
-| 依赖可信边界 | 作为平台共享组件或构建工具，应通过组织 Maven 仓库、版本锁定和发布流程控制依赖来源。 |
+#### 2. JSON 编解码增强能力
 
-## 与关联仓库的关系
+- `json` 包提供统一 `JsonCodec`
+- 支持数字原始格式保留与条件字段序列化
+- 适合平台在金额、精度和统一序列化规则场景下复用
 
-本仓库位于 g2rain 后端研发支撑层，通过 Maven 依赖为平台后端服务提供公共模型、通用工具和基础规范。
+典型用法：
 
-## 模块说明
+```java
+JsonCodec codec = JsonCodecFactory.instance();
+String json = codec.obj2str(data);
+OrderDto dto = codec.str2obj(json, OrderDto.class);
+```
 
-| 模块 | 职责说明 | 代码线索 |
-| --- | --- | --- |
-| 公共模型 | 沉淀平台后端通用 DTO、响应、异常、枚举或基础抽象。 | common/model/api/exception packages |
-| 通用工具 | 提供跨服务复用的工具方法、常量和工程辅助能力。 | util/support/core packages |
+#### 3. 事件同步抽象能力
 
-## 职责边界
+- `syncer` 包提供事件发布中心、事件模型、消息分发器和消息存储注册能力
+- 这里提供的是抽象层，不绑定具体业务服务
+- 为平台服务间同步、广播和异步处理提供统一接口基础
 
-该仓库主要负责：
-- 负责提供后端公共模型、通用工具、异常响应和基础抽象
-- 负责支撑多个 g2rain 后端服务复用一致的工程基础能力
+典型用法：
 
-该仓库默认不负责：
-- 不承载具体业务域流程
-- 不作为平台主数据或业务数据的权威来源
+```java
+EventPublisherHub hub = new EventPublisherHub(Map.of("sync", publisher));
+hub.sendUpdate("sync", "USER_SERVICE", payload);
+```
 
-## 常见问题
+#### 4. 主体上下文与安全模型能力
 
-| 问题 | 可能原因 | 处理建议 |
-| --- | --- | --- |
-| 业务工程无法解析依赖 | 组件未发布到当前 Maven 仓库，或 groupId/artifactId/version 配置不一致。 | 检查 Maven 仓库地址、版本号和业务工程 dependencyManagement 配置。 |
+- `web` 包定义主体上下文、请求头约定、Token JWT 与 DPoP JWT 基础模型
+- `PrincipalContextHolder` 基于作用域上下文封装请求级主体信息
+- 为平台身份链路和上下文透传提供基础结构
 
-## 关联仓库
+典型用法：
 
-| 仓库 | 协作关系 |
-| --- | --- |
-| g2rain-spring-boot-starter | 通常位于公共组件的上层，复用 g2rain-common 的基础模型、工具能力与工程约定，并进一步封装为 Starter。 |
+```java
+PrincipalContext context = new PrincipalContext();
+PrincipalContextHolder.runWith(context, () -> {
+    PrincipalContextHolder.setClientId("client-a");
+    PrincipalContextHolder.setTraceId("trace-1");
+});
+```
 
-## 参与贡献
+#### 5. 接入建议与边界
 
-我们欢迎所有形式的贡献：Issue 反馈、文档改进、功能建议与代码提交。
+- 如果目标是统一异常、统一返回结构、统一 JSON 规则，可直接引入 `g2rain-common`
+- 如果目标是落地自动配置、Spring 扩展或更强的框架集成，通常应和 `g2rain-spring-boot-starter` 配合使用
+- `syncer` 提供的是抽象和协议入口，不等于直接提供完整中间件能力
+- `web` 提供的是上下文、头信息和 JWT / DPoP 模型，上层鉴权和验签逻辑仍需由具体服务或 Starter 承载
 
-推荐流程：
+## 8. 常用命令
 
-1. Fork 本仓库。
-2. 创建特性分支：`git checkout -b feature/your-feature-name`。
-3. 提交更改：`git commit -m "Add some feature"`。
-4. 推送分支：`git push origin feature/your-feature-name`。
-5. 提交 Pull Request。
+```bash
+mvn compile
+mvn test
+mvn checkstyle:check pmd:check spotbugs:check
+mvn jacoco:report
+mvn package
+```
 
-代码贡献前请尽量补充必要的测试和文档，并确保构建、测试与静态检查通过。
+## 9. 质量与测试
 
-## 许可证
+- 当前扫描到主源码文件 `70` 个，测试文件 `49` 个
+- `exception`、`json`、`model`、`syncer`、`utils`、`web` 等核心包均有对应测试
+- 当前 `converter` 包未看到对应测试文件，后续可继续补强
+- 构建中启用了 `maven-enforcer-plugin`、`maven-checkstyle-plugin`、`maven-pmd-plugin`、`spotbugs-maven-plugin` 和 `jacoco-maven-plugin`
+- 仓库要求 `JDK 25`，建议团队本地环境与 CI 环境保持一致
 
-本项目基于 [Apache 2.0许可证](https://github.com/g2rain/g2rain-common/blob/main/LICENSE) 开源。
+## 10. 相关仓库
 
-## 联系我们
+- `g2rain-iam`
+- `g2rain-gateway-webmvc`
+- `g2rain-gateway-webflux`
+- `g2rain-infra`
+- `g2rain-department`
+- `g2rain-spring-boot-starter`
 
-- Issues: [GitHub Issues](https://github.com/g2rain/g2rain/issues)
-- 讨论: [GitHub Discussions](https://github.com/g2rain/g2rain/discussions)
-- 邮箱: g2rain_developer@163.com
+## 11. 使用建议
 
-## 致谢
+- 适合作为平台内 Java 项目的统一公共依赖
+- 适合在新服务、Starter、增强组件和脚手架中直接复用
+- 不建议把它理解为仅包含零散工具方法的 util 仓库
+- 若上层仓库需要统一上下文、统一异常、统一 JSON 规则或统一同步抽象，应优先复用这里的能力
 
-感谢所有为 g2rain 项目提交 Issue、代码、文档、建议和使用反馈的开发者们！
+## 12. 贡献指南
+
+欢迎通过文档改进、Issue 反馈、测试补充、代码优化、功能增强等形式参与贡献。
+
+建议流程：
+1. Fork 本仓库
+2. 创建特性分支
+3. 提交修改
+4. 推送分支
+5. 提交 Pull Request
+
+提交前请尽量确保：
+- 遵循现有技术栈与代码规范
+- 更新相关文档
+- 补充必要测试
+
+## 13. 许可证
+
+本项目基于 [Apache 2.0许可证](LICENSE) 开源。
+
+## 14. 联系我们
+
+- **站点**: https://www.g2rain.com/
+- **Issues**: [GitHub Issues](https://github.com/g2rain/g2rain/issues)
+- **讨论**: [GitHub Discussions](https://github.com/g2rain/g2rain/discussions)
+- **邮箱**: g2rain_developer@163.com
+
+## 15. 致谢
+
+感谢所有为这个项目做出贡献的开发者们。
+
+如果这个项目对您有帮助，欢迎 Star 支持。
