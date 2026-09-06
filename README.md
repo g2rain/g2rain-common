@@ -28,9 +28,9 @@
 - 技术栈
 - 环境要求
 - 快速开始
-- 构建与发布
+- 构建与镜像
 - 代码质量与测试
-- 接入与使用示例
+- 依赖引入
 - 安全说明
 - 与关联仓库的关系
 - 模块说明
@@ -134,7 +134,6 @@ g2rain-common/
 | 类别 | 说明 |
 | --- | --- |
 | 运行时 | Java 25 |
-| 公共 API 依赖 | Jackson Databind、MapStruct、Jakarta Validation、Swagger Annotations |
 | 其他 | Lombok |
 
 ## 环境要求
@@ -152,14 +151,12 @@ g2rain-common/
 
 版本号以项目构建配置为准，当前识别为 `1.0.7`。
 
-## 构建与发布
+## 构建与镜像
 
 | 目标 | 命令 | 产物 | 说明 |
 | --- | --- | --- | --- |
 | 组件产物 | `mvn clean package` | `g2rain-common-1.0.7.jar` | 执行 Maven 标准构建，生成可发布的公共库组件产物。 |
 | 本地 Maven 安装 | `mvn clean install` | `本地 Maven 仓库产物` | 安装到本地 Maven 仓库，便于业务工程本地验证依赖。 |
-| 正式版本发布 | `推送版本 Git Tag` | `Maven Central 正式版本` | release.yml 使用 JDK 25 执行 mvn -B -P release clean deploy，并完成源码包、Javadoc 与 GPG 签名发布。 |
-| Snapshot 发布 | `推送 develop 分支的 -SNAPSHOT 版本` | `Sonatype Snapshot 版本` | snapshot.yml 仅在项目版本以 -SNAPSHOT 结尾时执行 mvn -B clean deploy -DskipTests。 |
 
 ## 代码质量与测试
 
@@ -189,14 +186,10 @@ g2rain-common/
 | 主题 | 说明 |
 | --- | --- |
 | 依赖可信边界 | 作为平台共享组件或构建工具，应通过组织 Maven 仓库、版本锁定和发布流程控制依赖来源。 |
-| 主体上下文可信边界 | PrincipalContext 只负责承载上下文；外部请求头必须由网关或可信适配层完成认证、过滤和重建，业务服务不应直接信任客户端伪造的 PrincipalHeaders。 |
-| JWT/DPoP 职责边界 | TokenJWT* 与 DPoPJWT* 是公共数据结构，不等同于完整的签名、验签或令牌校验实现；安全校验应由 IAM、网关或 Starter 中的专用组件完成。 |
-| JSON 输入边界 | 解析不可信 JSON 时仍需限制请求体大小、嵌套深度和允许的目标类型；RawNumber 仅用于保留数字表达，不替代业务范围校验。 |
-| ScopedValue 传播 | 异步任务应使用 PrincipalContextHolder 提供的 wrap、runWith 或 callWith 显式传播上下文，避免跨任务读取错误主体。 |
 
 ## 与关联仓库的关系
 
-本仓库位于 g2rain 后端研发支撑层，通过 Maven 依赖向 Starter、网关、IAM、基础服务和业务服务提供稳定的公共 API；具体框架装配与运行时实现由 g2rain-spring-boot-starter 等上层组件完成。
+本仓库位于 g2rain 后端研发支撑层，通过 Maven 依赖为平台后端服务提供公共模型、通用工具和基础规范。
 
 ## 模块说明
 
@@ -227,23 +220,18 @@ g2rain-common/
 ## 职责边界
 
 该仓库主要负责：
-- 负责定义跨服务复用的响应、分页、异常、校验、JSON、主体上下文、JWT/DPoP 数据结构与事件同步公共 API
-- 负责提供低耦合扩展契约和无具体业务含义的基础工具，并通过单元测试保持公共行为稳定
+- 负责提供后端公共模型、通用工具、异常响应和基础抽象
+- 负责支撑多个 g2rain 后端服务复用一致的工程基础能力
 
 该仓库默认不负责：
-- 不负责校验外部请求身份、签发或验签令牌，也不应直接信任客户端传入的主体请求头
-- 不负责 Spring Bean 自动装配、消息中间件适配、ID 算法实现或具体业务数据持久化
-- 不承载任何具体业务域流程，也不作为用户、组织、应用等主数据的权威来源
+- 不承载具体业务域流程
+- 不作为平台主数据或业务数据的权威来源
 
 ## 常见问题
 
 | 问题 | 可能原因 | 处理建议 |
 | --- | --- | --- |
 | 业务工程无法解析依赖 | 组件未发布到当前 Maven 仓库，或 groupId/artifactId/version 配置不一致。 | 检查 Maven 仓库地址、版本号和业务工程 dependencyManagement 配置。 |
-| PrincipalContextHolder.require() 报错 | 当前调用不在已绑定 PrincipalContext 的作用域内，或异步任务未传播上下文。 | 在请求适配层使用 runWith/callWith 绑定上下文；提交异步任务前使用 wrap 包装 Runnable 或 Callable。 |
-| 校验抛出 PARAM_INVALID | CreateGroup、UpdateGroup 或 Default 组约束未通过。 | 读取 BusinessException 携带的 FieldError 列表，检查字段名、拒绝值和对应校验注解。 |
-| JSON 数字精度或输出字段不符合预期 | 未使用项目统一 JsonCodec 配置，或未启用 RawNumber/条件字段相关处理。 | 统一通过 JsonCodecFactory/JsonCodecBuilder 创建编解码器，并核对 RawNumberDeserializer 与 MixIn 配置。 |
-| 同步事件未被处理 | 发布通道、dataSource、EventType 或 MessageStorageRegistry 注册不匹配。 | 确认存储扩展已在初始化阶段注册，并核对 EventMessage 的数据源和事件类型。 |
 
 ## 关联仓库
 
