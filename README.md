@@ -13,7 +13,7 @@
 
 g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和错误码体系、JSON 编解码、主体上下文、JWT/DPoP 数据结构、事件同步抽象及通用开发工具；作为平台后端研发支撑层被多个 g2rain 服务复用
 
-[官网](https://www.g2rain.com) · [Issues](https://github.com/g2rain/g2rain/issues) · [Discussions](https://github.com/g2rain/g2rain/discussions)
+[官网](https://www.g2rain.com) · [完整文档](docs/index.md) · [公共 API 契约](docs/api/public-contracts.md) · [兼容性规则](docs/development/compatibility.md) · [Issues](https://github.com/g2rain/g2rain/issues) · [Discussions](https://github.com/g2rain/g2rain/discussions)
 
 ## 目录
 
@@ -33,6 +33,7 @@ g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和�
 - 安全说明
 - 与关联仓库的关系
 - 模块说明
+- 架构与工程文档
 - 职责边界
 - 常见问题
 - 关联仓库
@@ -48,6 +49,8 @@ g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和�
 ## 平台定位
 
 该仓库位于 g2rain 后端研发支撑层，为多个后端项目提供集成能力、工程化工具或共享扩展。
+
+本项目是 Supporting Library，而不是领域服务。中央仓库目前尚未发布适用于公共 Java 库的 `java-library` Profile，因此项目采用本地 `java-common-library 1.0.0-local` 工程基线，不套用 `java-domain-service` 规则。
 
 ## 业务域说明
 
@@ -159,11 +162,13 @@ flowchart TD
 
 | 检查项 | 命令 | 说明 |
 | --- | --- | --- |
-| Maven Enforcer | `mvn validate` | 约束 JDK 版本、Maven 版本与依赖规则。 |
+| 单元测试与 Enforcer | `mvn test` | 执行 JUnit 测试，并检查 JDK 25 与依赖上界规则。 |
 | Checkstyle | `mvn checkstyle:check` | 检查 Java 代码风格与组织规范。 |
 | PMD | `mvn pmd:check` | 执行静态规则检查，识别潜在代码问题。 |
 | SpotBugs | `mvn spotbugs:check` | 识别潜在缺陷和风险代码。 |
-| JaCoCo | `mvn test jacoco:report` | 运行测试并生成覆盖率报告。 |
+| JaCoCo | `mvn clean test jacoco:report` | 配置的覆盖率命令；当前因 Surefire `argLine` 覆盖导致缺少 execution data，尚不能声明覆盖率。 |
+
+2026-09-06 已执行 `mvn test`：编译 70 个主源码文件和 49 个测试源码文件，运行 256 项测试，0 失败、0 错误、0 跳过；Maven Enforcer 的 Java 版本与 `requireUpperBoundDeps` 检查通过。测试仍有 unchecked 编译提示，以及 Maven/JDK 的未来兼容性警告，详见[测试说明](docs/development/testing.md)。
 
 ## 接入与使用示例
 
@@ -202,6 +207,19 @@ flowchart TD
 | validation | 提供 Create/Update 校验分组、DTO 保存场景校验和字段错误聚合。 | Validations、CreateGroup、UpdateGroup、FieldError |
 | converter / id / enums | 提供 MapStruct 转换基类、ID 生成接口及组织、会话等公共枚举。 | CommonConverter、IdGenerator、OrganType、SessionType |
 | utils | 提供断言、集合、字符串、时间、数值、媒体类型和常量等无框架工具。 | Asserts、Collections、Strings、Moments、Decimals、MediaTypes、Constants |
+
+## 架构与工程文档
+
+| 主题 | 文档 |
+| --- | --- |
+| 项目机器可读事实 | [docs/project.yaml](docs/project.yaml) |
+| 架构与包职责 | [架构总览](docs/architecture/overview.md) · [包与模块](docs/architecture/modules.md) |
+| 依赖与已知风险 | [依赖边界](docs/architecture/dependencies.md) · [架构偏差](docs/architecture/deviations.md) |
+| 公共契约与版本演进 | [公共 API 契约](docs/api/public-contracts.md) · [兼容性](docs/development/compatibility.md) |
+| 开发与发布 | [完成定义](docs/development/definition-of-done.md) · [Maven Central 发布](docs/operations/publishing.md) |
+| 安全 | [安全边界](docs/security/security-boundaries.md) |
+
+所有 `public` 类型、方法、序列化字段、枚举值、错误码和请求头都可能成为消费方契约。破坏性变化需要明确迁移说明和版本策略，并在代表性消费项目中完成验证。
 
 ## 职责边界
 
@@ -244,9 +262,11 @@ flowchart TD
 
 代码贡献前请尽量补充必要的测试和文档，并确保构建、测试与静态检查通过。
 
+提交前请阅读[代码约定](docs/development/code-conventions.md)、[兼容性规则](docs/development/compatibility.md)和[完成定义](docs/development/definition-of-done.md)。
+
 ## 许可证
 
-本项目基于 [Apache 2.0许可证](https://github.com/g2rain/g2rain-common/blob/main/LICENSE) 开源。
+本项目基于 [Apache License 2.0](LICENSE) 开源。
 
 ## 联系我们
 
