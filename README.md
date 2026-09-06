@@ -1,21 +1,22 @@
-<p align="center">
-  <img src="https://github.com/g2rain.png" alt="G2Rain" width="180" />
-</p>
-
 # g2rain-common
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://central.sonatype.com/artifact/com.g2rain/g2rain-common)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-25-437291?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Maven](https://img.shields.io/badge/build-Maven-C71A36?logo=apachemaven&logoColor=white)](https://maven.apache.org/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://search.maven.org/artifact/com.g2rain/g2rain-common)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Java Version](https://img.shields.io/badge/Java-25+-orange.svg)](https://openjdk.java.net/)
+[![Build Status](https://img.shields.io/badge/build-Maven-C71A36?logo=apachemaven&logoColor=white)](https://github.com/g2rain/g2rain-common)
 
-下一代AI软件开发范式，AI原生Agent平台，开源的企业级SaaS底座。
+## 1. 徽标与状态标识
 
-g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和错误码体系、JSON 编解码、主体上下文、JWT/DPoP 数据结构、事件同步抽象及通用开发工具；作为平台后端研发支撑层被多个 g2rain 服务复用
+- 当前版本通过 `Maven Central` 发布
+- 当前运行时要求 `Java 25+`
+- 当前构建方式以 `Maven` 为准
+- 当前开源许可证为 `Apache 2.0`
+
+## 2. 项目简介
 
 [官网](https://www.g2rain.com) · [完整文档](docs/index.md) · [公共 API 契约](docs/api/public-contracts.md) · [兼容性规则](docs/development/compatibility.md) · [Issues](https://github.com/g2rain/g2rain/issues) · [Discussions](https://github.com/g2rain/g2rain/discussions)
 
-## 目录
+## 3. 平台定位
 
 - 项目简介
 - 平台定位
@@ -42,13 +43,26 @@ g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和�
 - 联系我们
 - 致谢
 
-## 项目简介
+## 4. 核心能力
 
-g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和错误码体系、JSON 编解码、主体上下文、JWT/DPoP 数据结构、事件同步抽象及通用开发工具；作为平台后端研发支撑层被多个 g2rain 服务复用
+- 统一异常与错误码体系：`BusinessException`、`ErrorCode`、`SystemErrorCode`、异常转换与本地化消息能力
+- 通用结果与分页模型：`Result`、`PageData`、`PageSelectListDto`、基础 DTO / PO / VO
+- JSON 编解码增强：`JsonCodec`、条件字段序列化、数字精度保留
+- 事件同步抽象：事件发布、消息分发、消息存储注册与事件模型
+- 主体上下文与安全模型：`PrincipalContext`、请求头约定、Token / DPoP JWT 模型
+- 校验与分组能力：创建/更新分组、统一校验辅助
+- 平台通用枚举与接口约定：会话类型、组织类型、ID 生成器、对象转换接口
+- 常用工具集合：断言、字符串、集合、时间、数值、媒体类型等
 
-## 平台定位
+## 5. 技术栈
 
-该仓库位于 g2rain 后端研发支撑层，为多个后端项目提供集成能力、工程化工具或共享扩展。
+- 语言与运行时：`Java 25`
+- 构建工具：`Maven`
+- 打包方式：`jar`
+- 核心依赖：`jackson-databind`、`mapstruct`、`swagger-annotations-jakarta`、`jakarta.validation-api`
+- 测试框架：`JUnit Jupiter`、`Mockito`
+- 质量工具：`Checkstyle`、`PMD`、`SpotBugs`、`JaCoCo`
+- 发布目标：`Maven Central / Sonatype Central Portal`
 
 本项目是 Supporting Library，而不是领域服务。中央仓库目前尚未发布适用于公共 Java 库的 `java-library` Profile，因此项目采用本地 `java-common-library 1.0.0-local` 工程基线，不套用 `java-domain-service` 规则。
 
@@ -75,55 +89,44 @@ g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和�
 - 领域事件的发布、通道选择、消息分发与存储处理流程
 - DTO 创建/更新分组校验与字段错误聚合流程
 
-## 功能概览
+### 本地构建
 
-| 能力 | 说明 |
-| --- | --- |
-| 统一响应与分页模型 | 通过 Result、PageData、BaseDto、BasePo、BaseVo、SortItem 等类型统一 API 返回、分页、排序和分层数据模型。 |
-| 异常与错误码体系 | 通过 ErrorCode、BusinessException、ExceptionProcessor、ExceptionConverter、FieldError 与 SystemErrorCode 统一错误定义、转换和输出。 |
-| 错误消息解析与本地化 | 通过 ErrorMessageRegistry、LocalizedErrorMessage、MessageResolver 支持错误消息注册、占位参数解析与多语言扩展。 |
-| JSON 编解码 | 通过 JsonCodec、JsonCodecBuilder 和 JsonCodecFactory 统一 Jackson 配置、对象转换、节点查询与条件字段输出。 |
-| 数字精度保留 | RawNumberDeserializer 与 RawNumberNode 保留 JSON 数字的原始文本表达，降低大整数或高精度数字转换损失。 |
-| 主体与请求上下文 | PrincipalContext、PrincipalContextHolder、PrincipalHeaders 和 ScopedContextHolder 统一承载并传播用户、组织、应用及链路上下文。 |
-| Token 与 DPoP 模型 | TokenJWTHeader、TokenJWTPayload、DPoPJWTHeader、DPoPJWTPayload 提供令牌及 DPoP Proof 的公共数据结构。 |
-| 事件同步抽象 | EventPublisherHub、EventPublisher、MessageDispatcher、AbstractMessageStorage 等类型定义事件发布、分发与存储扩展链路。 |
-| 校验、ID 与通用工具 | 提供创建/更新校验分组、字段错误聚合、ID 生成接口、MapStruct 转换基类以及字符串、集合、时间、数值等工具。 |
+```bash
+mvn clean package
+```
 
-## 使用场景
+### 本地测试
 
-| 场景 | 说明 |
-| --- | --- |
-| 统一服务 API 返回 | 使用 Result 与 PageData 返回成功、失败和分页结果，保持跨服务响应结构一致。 |
-| 建立领域错误规范 | 业务模块实现 ErrorCode、抛出 BusinessException，并通过处理器转换为包含字段错误和本地化消息的统一结果。 |
-| 传递认证主体上下文 | 网关、Starter 或服务适配层将请求头解析为 PrincipalContext，并在同步任务或 Callable 中安全传播。 |
-| 同步跨节点缓存或领域状态 | 通过事件发布器、消息分发器和消息存储扩展点广播 CREATE、UPDATE、DELETE 等变更。 |
-| 统一 JSON 与参数校验行为 | 在服务间复用 JSON 编解码配置、原始数字处理及 Create/Update 分组校验。 |
+```bash
+mvn test
+```
 
-## 核心流程
+### 发布说明
 
-| 流程 | 关键步骤 | 代码线索 |
-| --- | --- | --- |
-| 异常到统一响应 | 业务代码使用 ErrorCode 定义错误 → 抛出 BusinessException 或收集 FieldError → ExceptionProcessor/ExceptionConverter 解析异常 → MessageResolver 处理消息参数 → 输出 Result.error | ErrorCode、BusinessException、DefaultExceptionProcessor、ExceptionConverter、MessageResolver、Result |
-| 主体上下文传播 | 适配层根据 PrincipalHeaders 构建 PrincipalContext → 通过 PrincipalContextHolder 绑定作用域 → 业务代码读取用户、组织、应用与链路字段 → 异步任务使用 wrap/runWith/callWith 传播上下文 → 作用域结束后自动释放 | PrincipalHeaders、PrincipalContext、PrincipalContextHolder、ScopedContextHolder |
-| 事件发布与分发 | 调用 EventPublisherHub 选择发布通道 → 封装 EventMessage 与 EventType → EventPublisher 发送消息 → MessageDispatcher 解析并路由消息 → 匹配的 AbstractMessageStorage 处理变更 | EventPublisherHub、EventMessage、EventPublisher、DefaultMessageDispatcher、MessageStorageRegistry |
-| DTO 分组校验 | 根据 BaseDto.id 判断创建或更新 → 执行 CreateGroup/UpdateGroup 约束 → 补充 Default 组校验 → 将 ConstraintViolation 转换为 FieldError → 存在错误时抛出 BusinessException | Validations、BaseDto、CreateGroup、UpdateGroup、FieldError、SystemErrorCode |
+- 正式版通过 Git Tag 触发 `release.yml`
+- `develop` 分支上的 `-SNAPSHOT` 版本可通过 `snapshot.yml` 发布
+- Release 流程包含源码包、Javadoc 包和 GPG 签名
 
-## 流程图
+## 7. 项目结构
 
-```mermaid
-flowchart TD
-  A[业务或平台服务] --> B[调用公共 API]
-  B --> C{能力入口}
-  C --> D[Result/分页模型]
-  C --> E[异常与校验]
-  C --> F[主体/JWT 上下文]
-  C --> G[JSON 编解码]
-  C --> H[事件同步]
-  D --> I[一致的服务契约]
-  E --> I
-  F --> I
-  G --> I
-  H --> I
+```text
+g2rain-common/
+├── .github/workflows/
+│   ├── release.yml
+│   └── snapshot.yml
+├── src/main/java/com/g2rain/common/
+│   ├── converter
+│   ├── enums
+│   ├── exception
+│   ├── id
+│   ├── json
+│   ├── model
+│   ├── syncer
+│   ├── utils
+│   ├── validation
+│   └── web
+├── src/test/java/com/g2rain/common/
+└── pom.xml
 ```
 
 ## 技术栈
