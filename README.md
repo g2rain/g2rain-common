@@ -1,8 +1,95 @@
-<p align="center">
-  <img src="https://github.com/g2rain.png" alt="G2Rain" width="180" />
-</p>
-
 # g2rain-common
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://search.maven.org/artifact/com.g2rain/g2rain-common)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Java Version](https://img.shields.io/badge/Java-25+-orange.svg)](https://openjdk.java.net/)
+[![Build Status](https://img.shields.io/badge/build-Maven-C71A36?logo=apachemaven&logoColor=white)](https://github.com/g2rain/g2rain-common)
+
+## 1. 徽标与状态标识
+
+- 当前版本通过 `Maven Central` 发布
+- 当前运行时要求 `Java 25+`
+- 当前构建方式以 `Maven` 为准
+- 当前开源许可证为 `Apache 2.0`
+
+## 2. 项目简介
+
+[官网](https://www.g2rain.com) · [完整文档](docs/index.md) · [公共 API 契约](docs/api/public-contracts.md) · [兼容性规则](docs/development/compatibility.md) · [Issues](https://github.com/g2rain/g2rain/issues) · [Discussions](https://github.com/g2rain/g2rain/discussions)
+
+## 3. 平台定位
+
+- 项目简介
+- 平台定位
+- 业务域说明
+- 功能概览
+- 使用场景
+- 核心流程
+- 流程图
+- 技术栈
+- 环境要求
+- 快速开始
+- 构建与镜像
+- 代码质量与测试
+- 依赖引入
+- 安全说明
+- 与关联仓库的关系
+- 模块说明
+- 架构与工程文档
+- 职责边界
+- 常见问题
+- 关联仓库
+- 参与贡献
+- 许可证
+- 联系我们
+- 致谢
+
+## 4. 核心能力
+
+- 统一异常与错误码体系：`BusinessException`、`ErrorCode`、`SystemErrorCode`、异常转换与本地化消息能力
+- 通用结果与分页模型：`Result`、`PageData`、`PageSelectListDto`、基础 DTO / PO / VO
+- JSON 编解码增强：`JsonCodec`、条件字段序列化、数字精度保留
+- 事件同步抽象：事件发布、消息分发、消息存储注册与事件模型
+- 主体上下文与安全模型：`PrincipalContext`、请求头约定、Token / DPoP JWT 模型
+- 校验与分组能力：创建/更新分组、统一校验辅助
+- 平台通用枚举与接口约定：会话类型、组织类型、ID 生成器、对象转换接口
+- 常用工具集合：断言、字符串、集合、时间、数值、媒体类型等
+
+## 5. 技术栈
+
+- 语言与运行时：`Java 25`
+- 构建工具：`Maven`
+- 打包方式：`jar`
+- 核心依赖：`jackson-databind`、`mapstruct`、`swagger-annotations-jakarta`、`jakarta.validation-api`
+- 测试框架：`JUnit Jupiter`、`Mockito`
+- 质量工具：`Checkstyle`、`PMD`、`SpotBugs`、`JaCoCo`
+- 发布目标：`Maven Central / Sonatype Central Portal`
+
+本项目是 Supporting Library，而不是领域服务。中央仓库目前尚未发布适用于公共 Java 库的 `java-library` Profile，因此项目采用本地 `java-common-library 1.0.0-local` 工程基线，不套用 `java-domain-service` 规则。
+
+## 业务域说明
+
+该仓库聚焦于 `后端公共模型、通用规范、基础抽象与跨服务复用能力`。
+
+核心对象包括：
+- Token/DPoP JWT 载荷
+- 访问令牌
+- 分页数据
+- 会话
+- 同步事件消息
+- 统一响应结果
+- 业务异常与错误码
+- 应用
+- 主体
+- 主体上下文
+- 字段校验错误
+
+主要流程包括：
+- 业务异常到统一 Result 响应的转换流程
+- 请求主体上下文的绑定、读取、任务包装与作用域释放流程
+- 领域事件的发布、通道选择、消息分发与存储处理流程
+- DTO 创建/更新分组校验与字段错误聚合流程
+
+### 本地构建
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.g2rain/g2rain-common.svg)](https://central.sonatype.com/artifact/com.g2rain/g2rain-common)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
@@ -133,6 +220,15 @@ flowchart TD
 
 ## 环境要求
 
+## 技术栈
+
+| 类别 | 说明 |
+| --- | --- |
+| 运行时 | Java 25 |
+| 其他 | Lombok |
+
+## 环境要求
+
 - JDK 25+
 - Maven 3.9+
 
@@ -146,24 +242,24 @@ flowchart TD
 
 版本号以项目构建配置为准，当前识别为 `1.0.7`。
 
-## 构建与发布
+## 构建与镜像
 
 | 目标 | 命令 | 产物 | 说明 |
 | --- | --- | --- | --- |
 | 组件产物 | `mvn clean package` | `g2rain-common-1.0.7.jar` | 执行 Maven 标准构建，生成可发布的公共库组件产物。 |
 | 本地 Maven 安装 | `mvn clean install` | `本地 Maven 仓库产物` | 安装到本地 Maven 仓库，便于业务工程本地验证依赖。 |
-| 正式版本发布 | `推送版本 Git Tag` | `Maven Central 正式版本` | release.yml 使用 JDK 25 执行 mvn -B -P release clean deploy，并完成源码包、Javadoc 与 GPG 签名发布。 |
-| Snapshot 发布 | `推送 develop 分支的 -SNAPSHOT 版本` | `Sonatype Snapshot 版本` | snapshot.yml 仅在项目版本以 -SNAPSHOT 结尾时执行 mvn -B clean deploy -DskipTests。 |
 
 ## 代码质量与测试
 
 | 检查项 | 命令 | 说明 |
 | --- | --- | --- |
-| Maven Enforcer | `mvn validate` | 约束 JDK 版本、Maven 版本与依赖规则。 |
+| 单元测试与 Enforcer | `mvn test` | 执行 JUnit 测试，并检查 JDK 25 与依赖上界规则。 |
 | Checkstyle | `mvn checkstyle:check` | 检查 Java 代码风格与组织规范。 |
 | PMD | `mvn pmd:check` | 执行静态规则检查，识别潜在代码问题。 |
 | SpotBugs | `mvn spotbugs:check` | 识别潜在缺陷和风险代码。 |
-| JaCoCo | `mvn test jacoco:report` | 运行测试并生成覆盖率报告。 |
+| JaCoCo | `mvn clean test jacoco:report` | 配置的覆盖率命令；当前因 Surefire `argLine` 覆盖导致缺少 execution data，尚不能声明覆盖率。 |
+
+2026-09-06 已执行 `mvn test`：编译 70 个主源码文件和 49 个测试源码文件，运行 256 项测试，0 失败、0 错误、0 跳过；Maven Enforcer 的 Java 版本与 `requireUpperBoundDeps` 检查通过。测试仍有 unchecked 编译提示，以及 Maven/JDK 的未来兼容性警告，详见[测试说明](docs/development/testing.md)。
 
 ## 接入与使用示例
 
@@ -181,14 +277,10 @@ flowchart TD
 | 主题 | 说明 |
 | --- | --- |
 | 依赖可信边界 | 作为平台共享组件或构建工具，应通过组织 Maven 仓库、版本锁定和发布流程控制依赖来源。 |
-| 主体上下文可信边界 | PrincipalContext 只负责承载上下文；外部请求头必须由网关或可信适配层完成认证、过滤和重建，业务服务不应直接信任客户端伪造的 PrincipalHeaders。 |
-| JWT/DPoP 职责边界 | TokenJWT* 与 DPoPJWT* 是公共数据结构，不等同于完整的签名、验签或令牌校验实现；安全校验应由 IAM、网关或 Starter 中的专用组件完成。 |
-| JSON 输入边界 | 解析不可信 JSON 时仍需限制请求体大小、嵌套深度和允许的目标类型；RawNumber 仅用于保留数字表达，不替代业务范围校验。 |
-| ScopedValue 传播 | 异步任务应使用 PrincipalContextHolder 提供的 wrap、runWith 或 callWith 显式传播上下文，避免跨任务读取错误主体。 |
 
 ## 与关联仓库的关系
 
-本仓库位于 g2rain 后端研发支撑层，通过 Maven 依赖向 Starter、网关、IAM、基础服务和业务服务提供稳定的公共 API；具体框架装配与运行时实现由 g2rain-spring-boot-starter 等上层组件完成。
+本仓库位于 g2rain 后端研发支撑层，通过 Maven 依赖为平台后端服务提供公共模型、通用工具和基础规范。
 
 ## 模块说明
 
@@ -203,26 +295,34 @@ flowchart TD
 | converter / id / enums | 提供 MapStruct 转换基类、ID 生成接口及组织、会话等公共枚举。 | CommonConverter、IdGenerator、OrganType、SessionType |
 | utils | 提供断言、集合、字符串、时间、数值、媒体类型和常量等无框架工具。 | Asserts、Collections、Strings、Moments、Decimals、MediaTypes、Constants |
 
+## 架构与工程文档
+
+| 主题 | 文档 |
+| --- | --- |
+| 项目机器可读事实 | [docs/project.yaml](docs/project.yaml) |
+| 架构与包职责 | [架构总览](docs/architecture/overview.md) · [包与模块](docs/architecture/modules.md) |
+| 依赖与已知风险 | [依赖边界](docs/architecture/dependencies.md) · [架构偏差](docs/architecture/deviations.md) |
+| 公共契约与版本演进 | [公共 API 契约](docs/api/public-contracts.md) · [兼容性](docs/development/compatibility.md) |
+| 开发与发布 | [完成定义](docs/development/definition-of-done.md) · [Maven Central 发布](docs/operations/publishing.md) |
+| 安全 | [安全边界](docs/security/security-boundaries.md) |
+
+所有 `public` 类型、方法、序列化字段、枚举值、错误码和请求头都可能成为消费方契约。破坏性变化需要明确迁移说明和版本策略，并在代表性消费项目中完成验证。
+
 ## 职责边界
 
 该仓库主要负责：
-- 负责定义跨服务复用的响应、分页、异常、校验、JSON、主体上下文、JWT/DPoP 数据结构与事件同步公共 API
-- 负责提供低耦合扩展契约和无具体业务含义的基础工具，并通过单元测试保持公共行为稳定
+- 负责提供后端公共模型、通用工具、异常响应和基础抽象
+- 负责支撑多个 g2rain 后端服务复用一致的工程基础能力
 
 该仓库默认不负责：
-- 不负责校验外部请求身份、签发或验签令牌，也不应直接信任客户端传入的主体请求头
-- 不负责 Spring Bean 自动装配、消息中间件适配、ID 算法实现或具体业务数据持久化
-- 不承载任何具体业务域流程，也不作为用户、组织、应用等主数据的权威来源
+- 不承载具体业务域流程
+- 不作为平台主数据或业务数据的权威来源
 
 ## 常见问题
 
 | 问题 | 可能原因 | 处理建议 |
 | --- | --- | --- |
 | 业务工程无法解析依赖 | 组件未发布到当前 Maven 仓库，或 groupId/artifactId/version 配置不一致。 | 检查 Maven 仓库地址、版本号和业务工程 dependencyManagement 配置。 |
-| PrincipalContextHolder.require() 报错 | 当前调用不在已绑定 PrincipalContext 的作用域内，或异步任务未传播上下文。 | 在请求适配层使用 runWith/callWith 绑定上下文；提交异步任务前使用 wrap 包装 Runnable 或 Callable。 |
-| 校验抛出 PARAM_INVALID | CreateGroup、UpdateGroup 或 Default 组约束未通过。 | 读取 BusinessException 携带的 FieldError 列表，检查字段名、拒绝值和对应校验注解。 |
-| JSON 数字精度或输出字段不符合预期 | 未使用项目统一 JsonCodec 配置，或未启用 RawNumber/条件字段相关处理。 | 统一通过 JsonCodecFactory/JsonCodecBuilder 创建编解码器，并核对 RawNumberDeserializer 与 MixIn 配置。 |
-| 同步事件未被处理 | 发布通道、dataSource、EventType 或 MessageStorageRegistry 注册不匹配。 | 确认存储扩展已在初始化阶段注册，并核对 EventMessage 的数据源和事件类型。 |
 
 ## 关联仓库
 
@@ -244,9 +344,11 @@ flowchart TD
 
 代码贡献前请尽量补充必要的测试和文档，并确保构建、测试与静态检查通过。
 
+提交前请阅读[代码约定](docs/development/code-conventions.md)、[兼容性规则](docs/development/compatibility.md)和[完成定义](docs/development/definition-of-done.md)。
+
 ## 许可证
 
-本项目基于 [Apache 2.0许可证](https://github.com/g2rain/g2rain-common/blob/main/LICENSE) 开源。
+本项目基于 [Apache License 2.0](LICENSE) 开源。
 
 ## 联系我们
 

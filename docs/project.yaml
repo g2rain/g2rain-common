@@ -1,0 +1,89 @@
+schemaVersion: 1
+name: g2rain-common
+family: java-common-library
+role: G2rain 跨服务公共 Java 契约与基础能力库
+coordinates: com.g2rain:g2rain-common
+version: 1.0.7
+packaging: jar
+license: Apache-2.0
+
+architectureBaseline:
+  scope: project-local
+  profile: java-common-library
+  version: 1.0.0-local
+  status: local
+  centralProfileAvailable: false
+  note: 中央仓库当前未发布适用于公共 Java 库的 Profile，不采用 java-domain-service
+  deviations: docs/architecture/deviations.md
+
+ownership:
+  owns:
+    - 跨服务共享的数据模型、分页和统一结果契约
+    - 错误码、业务异常、消息解析与异常转换抽象
+    - JSON 编解码、数字精度处理和条件字段输出能力
+    - Bean Validation 分组与校验入口
+    - Principal、JWT/DPoP 数据结构、请求头和 ScopedValue 上下文
+    - 事件发布、分发和消息存储扩展契约
+    - ID 生成接口、公共枚举、转换器和基础工具
+  excludes:
+    - 具体领域业务、持久化、Controller 和应用启动配置
+    - IAM 的 Token 签发、验签和认证流程
+    - 消息中间件客户端、绑定配置和消息可靠性实现
+    - ID 生成算法及远程发号服务实现
+
+packages:
+  - converter
+  - enums
+  - exception
+  - id
+  - json
+  - model
+  - syncer
+  - utils
+  - validation
+  - web
+
+toolchain:
+  java: "25"
+  maven: "3.9+"
+  test: JUnit Jupiter 6.0.3
+  mocking: Mockito 5.23.0
+  json: Jackson 3.1.1
+  mapping: MapStruct 1.6.3
+
+commands:
+  test: mvn test
+  package: mvn clean package
+  checkstyle: mvn checkstyle:check
+  pmd: mvn pmd:check
+  spotbugs: mvn spotbugs:check
+  coverage: mvn clean test jacoco:report
+  snapshot: mvn -B clean deploy -DskipTests
+  release: mvn -B -P release clean deploy
+
+publishing:
+  repository: Maven Central Portal
+  snapshotTrigger: push to develop when version ends with -SNAPSHOT
+  releaseTrigger: tag v*.*.* or workflow dispatch
+  signing: GPG in release profile
+
+validation:
+  reviewedAt: "2026-09-06"
+  command: mvn test
+  status: test-passed
+  testsRun: 256
+  failures: 0
+  errors: 0
+  skipped: 0
+  notes:
+    - Maven Enforcer Java and upper-bound dependency rules passed
+    - 编译 70 个主源码文件和 49 个测试源码文件
+    - JaCoCo report 在本次 mvn test 中因缺少 execution data 被跳过
+    - Maven/Jansi 输出了未来版本原生访问与 Unsafe 兼容警告
+
+documentation:
+  entry: docs/index.md
+  agentEntry: AGENTS.md
+  publicContracts: docs/api/public-contracts.md
+  requirements: docs/requirements/README.md
+
