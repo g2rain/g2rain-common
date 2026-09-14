@@ -11,7 +11,14 @@ class PrincipalHeadersTest {
     @Test
     @DisplayName("测试枚举值")
     void testEnumValues() {
-        assertEquals(19, PrincipalHeaders.values().length);
+        assertEquals(20, PrincipalHeaders.values().length);
+    }
+
+    @Test
+    @DisplayName("测试会员ID头部")
+    void testMemberId() {
+        assertEquals("X-MEMBER-ID", PrincipalHeaders.MEMBER_ID.getUpper());
+        assertEquals("x-member-id", PrincipalHeaders.MEMBER_ID.getLower());
     }
 
     @Test

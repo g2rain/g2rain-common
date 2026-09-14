@@ -85,5 +85,7 @@ documentation:
   entry: docs/index.md
   agentEntry: AGENTS.md
   publicContracts: docs/api/public-contracts.md
+  designs:
+    - docs/design/member-session-contract.md
   requirements: docs/requirements/README.md
 

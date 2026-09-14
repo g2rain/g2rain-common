@@ -8,6 +8,7 @@
 - 错误：`ErrorCode`、`BusinessException`、字段错误、本地化消息和异常转换。
 - JSON：默认 `JsonCodecFactory`、可配置 `JsonCodecBuilder`、原始数字节点与条件输出注解。
 - 上下文：Principal/JWT/DPoP 数据结构、`PrincipalHeaders` 和基于 ScopedValue 的 holder。
+- 会话：`SessionType`（含 `MEMBER`）、`memberId` 与请求头 `X-MEMBER-ID`；详见 [MEMBER 公共契约](../design/member-session-contract.md)。
 - 事件：`EventPublisher`、`MessageDispatcher`、`AbstractMessageStorage`、`EventType` 与 `EventMessage`。
 - 扩展：`IdGenerator`、Create/Update Validation Group、MapStruct 时间转换器。
 
