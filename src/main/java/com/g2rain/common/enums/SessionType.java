@@ -41,7 +41,12 @@ public enum SessionType {
     /**
      * 匿名
      */
-    ANONYMOUS;
+    ANONYMOUS,
+
+    /**
+     * 会员（如企业微信客服外部联系人，无 Passport）
+     */
+    MEMBER;
 
     /**
      * 判断给定会话类型是否为 {@link #USER}（用户登录身份）。
@@ -83,5 +88,15 @@ public enum SessionType {
      */
     public static boolean isAnonymous(SessionType sessionType) {
         return Objects.nonNull(sessionType) && ANONYMOUS == sessionType;
+    }
+
+    /**
+     * 判断给定会话类型是否为 {@link #MEMBER}（会员身份）。
+     *
+     * @param sessionType 待判断的会话类型
+     * @return {@code true} 如果是 {@link #MEMBER} 类型，否则 {@code false}
+     */
+    public static boolean isMember(SessionType sessionType) {
+        return Objects.nonNull(sessionType) && MEMBER == sessionType;
     }
 }

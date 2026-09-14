@@ -1,6 +1,7 @@
 # 安全边界
 
 - `web` 包的数据结构不是认证实现；Token 签发、验签、过期、撤销与权限校验属于 IAM 和接入服务。
+- `SessionType.MEMBER` 与 `X-MEMBER-ID` 是跨服务主体契约；会员主体不得映射到 `userId`。详见 [MEMBER 公共契约](../design/member-session-contract.md)。
 - JWT/DPoP Payload、PrincipalContext 与请求头可能含身份信息，不得完整写入日志、异常或 `toString`。
 - ScopedValue 上下文必须限制在请求或任务作用域，防止跨请求串用；异步任务应使用明确的上下文包装。
 - JSON 反序列化不得启用不受控多态类型；处理外部 JSON 时限制大小、深度和目标类型。

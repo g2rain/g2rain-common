@@ -46,6 +46,21 @@ class PrincipalContextTest {
     }
 
     @Test
+    @DisplayName("测试会员 ID 头部读写与透传")
+    void testMemberIdHeaderAndPropagation() {
+        PrincipalContext context = PrincipalContext.of();
+        context.setValue(PrincipalHeaders.MEMBER_ID, "10001");
+        assertEquals(10001L, context.getMemberId());
+        assertEquals("10001", context.getValue(PrincipalHeaders.MEMBER_ID));
+        assertTrue(context.getHeaders().containsKey(PrincipalHeaders.MEMBER_ID.getUpper()));
+        assertEquals(
+            "10001",
+            context.getHeaders().get(PrincipalHeaders.MEMBER_ID.getUpper()).iterator().next()
+        );
+        assertFalse(context.getHeaders().containsKey(PrincipalHeaders.USER_ID.getUpper()));
+    }
+
+    @Test
     @DisplayName("测试设置组织类型")
     void testSetOrganType() {
         PrincipalContext context = PrincipalContext.of();

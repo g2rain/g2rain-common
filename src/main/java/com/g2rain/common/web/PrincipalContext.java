@@ -133,6 +133,7 @@ public class PrincipalContext extends BasePrincipal {
             case SESSION_TYPE -> toStrOrNull(this.sessionType);
             case PASSPORT_ID -> toStrOrNull(this.passportId);
             case USER_ID -> toStrOrNull(this.userId);
+            case MEMBER_ID -> toStrOrNull(this.memberId);
             case NAME -> this.name;
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
@@ -169,6 +170,7 @@ public class PrincipalContext extends BasePrincipal {
             case SESSION_TYPE -> this.sessionType = SessionType.valueOf(value);
             case PASSPORT_ID -> this.passportId = parseLongOrNull(value);
             case USER_ID -> this.userId = parseLongOrNull(value);
+            case MEMBER_ID -> this.memberId = parseLongOrNull(value);
             case NAME -> this.name = safeDecode(value);
             case ADMIN_USER -> this.adminUser = Boolean.parseBoolean(value);
             case ORGAN_TYPE -> this.organType = OrganType.safeOf(value);
@@ -189,7 +191,7 @@ public class PrincipalContext extends BasePrincipal {
      * <p>具体行为：</p>
      * <ul>
      *     <li>Boolean 类型字段（如 adminUser、adminCompany、debug、backEnd）转换为字符串 "true"/"false"</li>
-     *     <li>Long 类型字段（如 passportId、userId、organId、applicationId、applicationOrganId）转换为字符串</li>
+     *     <li>Long 类型字段（如 passportId、userId、memberId、organId、applicationId、applicationOrganId）转换为字符串</li>
      *     <li>枚举类型字段（如 sessionType、organType）使用枚举名称作为字符串</li>
      *     <li>其他 String 类型字段（如 clientId、name、organName、traceId、requestId、requestTime、acceptLanguage）直接使用原值</li>
      *     <li>仅在值非 null 或非空时才加入 Map，避免空值覆盖 Header</li>
@@ -217,6 +219,10 @@ public class PrincipalContext extends BasePrincipal {
 
         if (Objects.nonNull(this.userId)) {
             headers.put(PrincipalHeaders.USER_ID.getUpper(), List.of(String.valueOf(this.userId)));
+        }
+
+        if (Objects.nonNull(this.memberId)) {
+            headers.put(PrincipalHeaders.MEMBER_ID.getUpper(), List.of(String.valueOf(this.memberId)));
         }
 
         if (Strings.isNotBlank(this.name)) {

@@ -61,6 +61,11 @@ public enum PrincipalHeaders {
     USER_ID("X-USER-ID", "x-user-id"),
 
     /**
+     * 会员标识，会员唯一 ID，用于 SessionType=MEMBER 会话
+     */
+    MEMBER_ID("X-MEMBER-ID", "x-member-id"),
+
+    /**
      * 真实姓名，用户真实姓名，用于展示或身份确认
      */
     NAME("X-NAME", "x-name"),
