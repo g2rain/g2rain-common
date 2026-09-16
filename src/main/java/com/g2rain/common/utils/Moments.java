@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentMap;
  * <p><b>使用示例：</b></p>
  * <pre>{@code
  * String nowStr = Moments.nowString(); // 默认格式
+ * String shanghai = Moments.nowString(ZoneId.of("Asia/Shanghai"));
  * String custom = Moments.nowString("yyyy/MM/dd HH:mm"); // 自定义格式
  * LocalDateTime time = Moments.parse("2025-10-07 12:00:00");
  * String formatted = Moments.format(time, "yyyy-MM-dd");
@@ -73,7 +74,9 @@ public class Moments {
         }
 
         String formatKey = pattern.trim();
-        return FORMATTER_CACHE.computeIfAbsent(formatKey, DateTimeFormatter::ofPattern);
+        return FORMATTER_CACHE.computeIfAbsent(
+            formatKey, DateTimeFormatter::ofPattern
+        );
     }
 
     /**
@@ -97,6 +100,7 @@ public class Moments {
         if (Objects.isNull(dateTime)) {
             return null;
         }
+
         return getFormatter(pattern).format(dateTime);
     }
 
@@ -107,8 +111,10 @@ public class Moments {
      * @return 格式化后的字符串
      */
     public static String formatEpochMillis(Long timestamp) {
-        return DEFAULT_FORMATTER.format(
-            Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime()
+        return DEFAULT_FORMATTER.format(Instant
+            .ofEpochMilli(timestamp)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime()
         );
     }
 
@@ -154,6 +160,20 @@ public class Moments {
     }
 
     /**
+     * 获取指定时区的当前时间 {@link LocalDateTime}。
+     *
+     * @param zone 时区；{@code null} 时与 {@link #now()} 相同（JVM 默认时区）
+     * @return 该时区墙上时钟
+     */
+    public static LocalDateTime now(ZoneId zone) {
+        if (Objects.isNull(zone)) {
+            return now();
+        }
+
+        return LocalDateTime.now(zone);
+    }
+
+    /**
      * 获取当前时间的默认格式字符串。
      *
      * @return 当前时间字符串
@@ -170,6 +190,16 @@ public class Moments {
      */
     public static String nowString(String pattern) {
         return format(now(), pattern);
+    }
+
+    /**
+     * 获取指定时区当前时间的默认格式字符串。
+     *
+     * @param zone 时区；{@code null} 时与 {@link #nowString()} 相同
+     * @return 默认格式时间字符串
+     */
+    public static String nowString(ZoneId zone) {
+        return format(now(zone));
     }
 
     /**

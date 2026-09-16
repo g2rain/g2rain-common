@@ -64,15 +64,24 @@ public class DefaultMessageDispatcher implements MessageDispatcher {
         EventType eventType = em.getEventType();
         String rawData = em.getData();
         // 如果任何字段为空，则跳过该消息
-        if (Strings.isBlank(dataSource) || Objects.isNull(eventType) || Strings.isBlank(rawData)) {
+        if (Strings.isBlank(dataSource) || Objects.isNull(eventType)) {
+            return;
+        }
+
+        if (eventType != EventType.REFRESH && Strings.isBlank(rawData)) {
             return;
         }
 
         // 根据数据源过滤出相关的消息存储，并进行相应的事件处理
-        messageStorages.stream().filter(s -> dataSource.equals(s.dataSource())).forEach(ms ->
+        messageStorages.stream().filter(s -> dataSource.equals(s.dataSource())).forEach(ms -> {
+            if (eventType == EventType.REFRESH) {
+                ms.load();
+                return;
+            }
+
             // 调用 doDispatch 进行事件分发
-            doDispatch(ms, eventType, rawData)
-        );
+            doDispatch(ms, eventType, rawData);
+        });
     }
 
     /**
@@ -103,9 +112,12 @@ public class DefaultMessageDispatcher implements MessageDispatcher {
                 case UPDATE -> ms.update(key, data);
                 // 如果是删除事件，调用 remove 方法
                 case DELETE -> ms.delete(key);
+                // REFRESH 在 dispatch 入口已处理；此处兜底忽略
+                case REFRESH -> {
+                }
             }
-        } catch (Exception e) {
-            // log.error("消息处理失败: {}", e.getMessage(), e); // 处理异常，记录错误信息
+        } catch (Exception ignore) {
+
         }
     }
 }
