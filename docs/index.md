@@ -9,6 +9,7 @@
 - [依赖边界](architecture/dependencies.md)
 - [架构偏差](architecture/deviations.md)
 - [公共 API 契约](api/public-contracts.md)
+- [SessionType=MEMBER 公共契约](design/member-session-contract.md)
 
 ## 开发与发布
 

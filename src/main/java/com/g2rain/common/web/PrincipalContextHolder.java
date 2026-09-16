@@ -372,6 +372,30 @@ public final class PrincipalContextHolder {
     }
 
     /**
+     * 设置 memberId
+     */
+    public static void setMemberId(Long memberId) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.setMemberId(memberId);
+    }
+
+    /**
+     * 获取 memberId
+     */
+    public static Long getMemberId() {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return null;
+        }
+
+        return principalContext.getMemberId();
+    }
+
+    /**
      * 设置 name
      */
     public static void setName(String name) {

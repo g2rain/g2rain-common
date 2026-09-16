@@ -11,6 +11,9 @@ import java.util.Objects;
  *     <li>{@link #USER} — 用户登录 IoT 身份类型</li>
  *     <li>{@link #PASSPORT} — 账号登录 IoT 身份类型</li>
  *     <li>{@link #ANONYMOUS} — 匿名访问身份类型</li>
+ *     <li>{@link #MEMBER} — 会员会话；经 Gateway 的访问 Token 须具备合法应用上下文
+ *         （正数 {@code applicationId}/{@code applicationOrganId}、scopes、客户端绑钥），
+ *         与员工会话同一 Token 使用协议（Bearer + DPoP + 请求摘要），不减免协议校验</li>
  * </ul>
  * <p>
  * 提供了身份类型判断方法，方便业务逻辑快速识别会话类型。
@@ -41,7 +44,12 @@ public enum SessionType {
     /**
      * 匿名
      */
-    ANONYMOUS;
+    ANONYMOUS,
+
+    /**
+     * 会员（如企业微信客服外部联系人，无 Passport）
+     */
+    MEMBER;
 
     /**
      * 判断给定会话类型是否为 {@link #USER}（用户登录身份）。
@@ -83,5 +91,15 @@ public enum SessionType {
      */
     public static boolean isAnonymous(SessionType sessionType) {
         return Objects.nonNull(sessionType) && ANONYMOUS == sessionType;
+    }
+
+    /**
+     * 判断给定会话类型是否为 {@link #MEMBER}（会员身份）。
+     *
+     * @param sessionType 待判断的会话类型
+     * @return {@code true} 如果是 {@link #MEMBER} 类型，否则 {@code false}
+     */
+    public static boolean isMember(SessionType sessionType) {
+        return Objects.nonNull(sessionType) && MEMBER == sessionType;
     }
 }

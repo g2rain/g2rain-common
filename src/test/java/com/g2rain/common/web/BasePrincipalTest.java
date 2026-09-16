@@ -22,6 +22,7 @@ class BasePrincipalTest {
         assertNull(principal.getSessionType());
         assertNull(principal.getPassportId());
         assertNull(principal.getUserId());
+        assertNull(principal.getMemberId());
         assertNull(principal.getName());
         assertFalse(principal.isAdminUser());
         assertNull(principal.getOrganType());
@@ -33,6 +34,7 @@ class BasePrincipalTest {
         principal.setSessionType(SessionType.USER);
         principal.setPassportId(123L);
         principal.setUserId(456L);
+        principal.setMemberId(10001L);
         principal.setName("John Doe");
         principal.setAdminUser(true);
         principal.setOrganType(OrganType.COMPANY);
@@ -43,11 +45,25 @@ class BasePrincipalTest {
         assertEquals(SessionType.USER, principal.getSessionType());
         assertEquals(123L, principal.getPassportId());
         assertEquals(456L, principal.getUserId());
+        assertEquals(10001L, principal.getMemberId());
         assertEquals("John Doe", principal.getName());
         assertTrue(principal.isAdminUser());
         assertEquals(OrganType.COMPANY, principal.getOrganType());
         assertEquals(789L, principal.getOrganId());
         assertEquals("Test Company", principal.getOrganName());
         assertTrue(principal.isAdminCompany());
+    }
+
+    @Test
+    @DisplayName("MEMBER 会话主体写入 memberId 而非 userId")
+    void testMemberSessionUsesMemberIdNotUserId() {
+        BasePrincipal principal = new BasePrincipal();
+        principal.setSessionType(SessionType.MEMBER);
+        principal.setMemberId(10001L);
+
+        assertEquals(SessionType.MEMBER, principal.getSessionType());
+        assertEquals(10001L, principal.getMemberId());
+        assertNull(principal.getUserId());
+        assertNull(principal.getPassportId());
     }
 }

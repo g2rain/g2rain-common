@@ -24,6 +24,7 @@ class TokenJWTPayloadTest {
         assertNull(payload.getSessionType());
         assertNull(payload.getPassportId());
         assertNull(payload.getUserId());
+        assertNull(payload.getMemberId());
         assertNull(payload.getName());
         assertFalse(payload.isAdminUser());
         assertNull(payload.getOrganType());
@@ -37,6 +38,22 @@ class TokenJWTPayloadTest {
         assertNull(payload.getRefreshExpireAt());
         assertNull(payload.getClientId());
         assertNull(payload.getRoleIds());
+    }
+
+    @Test
+    @DisplayName("MEMBER Token 载荷使用 memberId 而非 userId")
+    void testMemberTokenPayloadUsesMemberId() {
+        TokenJWTPayload payload = new TokenJWTPayload();
+        payload.setSessionType(SessionType.MEMBER);
+        payload.setOrganId(10001L);
+        payload.setMemberId(9L);
+        payload.setIssuedAt(1L);
+        payload.setExpireAt(2L);
+
+        assertEquals(SessionType.MEMBER, payload.getSessionType());
+        assertEquals(9L, payload.getMemberId());
+        assertNull(payload.getUserId());
+        assertNull(payload.getPassportId());
     }
 
     @Test

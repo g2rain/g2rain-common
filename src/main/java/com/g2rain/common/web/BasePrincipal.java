@@ -55,6 +55,12 @@ public class BasePrincipal {
     protected Long userId;
 
     /**
+     * 会员 ID
+     * <p>用于 {@link SessionType#MEMBER} 会话主体；不得写入 {@link #userId}。</p>
+     */
+    protected Long memberId;
+
+    /**
      * 真实姓名
      * <p>用于展示或身份确认。</p>
      */
