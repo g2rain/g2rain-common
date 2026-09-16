@@ -610,4 +610,51 @@ public final class PrincipalContextHolder {
 
         return principalContext.getApplicationOrganId();
     }
+
+    /**
+     * 放入当前请求的自定义属性；无上下文时忽略；{@code value == null} 时按
+     * {@link PrincipalContext#putAttribute} 语义删除。
+     *
+     * @param key   类型安全的属性键
+     * @param value 属性值
+     * @param <T>   值类型
+     */
+    public static <T> void putAttribute(ContextKey<T> key, T value) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.putAttribute(key, value);
+    }
+
+    /**
+     * 从当前请求取出自定义属性；无上下文、不存在或类型不匹配时返回 {@code null}。
+     *
+     * @param key 类型安全的属性键
+     * @param <T> 值类型
+     * @return 属性值，或 {@code null}
+     */
+    public static <T> T getAttribute(ContextKey<T> key) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return null;
+        }
+
+        return principalContext.getAttribute(key);
+    }
+
+    /**
+     * 删除当前请求的自定义属性；无上下文时忽略。
+     *
+     * @param key 类型安全的属性键
+     */
+    public static void removeAttribute(ContextKey<?> key) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.removeAttribute(key);
+    }
 }

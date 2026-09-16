@@ -100,6 +100,28 @@ public class BusinessException extends RuntimeException {
     }
 
     /**
+     * <p>构造带索引参数与 cause 的业务异常（{@code cause} 放在 varargs 前，避免与仅 indexArgs 重载冲突）。</p>
+     *
+     * @param errorCode 错误码枚举对象
+     * @param cause     异常原因
+     * @param indexArgs 索引参数
+     */
+    public BusinessException(ErrorCode errorCode, Throwable cause, Object... indexArgs) {
+        this(errorCode, null, indexArgs, null, cause);
+    }
+
+    /**
+     * <p>构造带键值参数与 cause 的业务异常。</p>
+     *
+     * @param errorCode 错误码枚举对象
+     * @param cause     异常原因
+     * @param keyArgs   键值参数映射
+     */
+    public BusinessException(ErrorCode errorCode, Throwable cause, Map<String, Object> keyArgs) {
+        this(errorCode, keyArgs, null, null, cause);
+    }
+
+    /**
      * <p>构造一个完整的 {@code BusinessException} 对象。</p>
      *
      * @param errorCode   错误码枚举对象

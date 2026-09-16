@@ -31,5 +31,10 @@ public enum EventType {
     /**
      * 更新事件
      */
-    UPDATE
+    UPDATE,
+
+    /**
+     * 刷新事件
+     */
+    REFRESH
 }

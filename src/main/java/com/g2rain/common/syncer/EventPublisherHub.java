@@ -116,4 +116,14 @@ public record EventPublisherHub(Map<String, EventPublisher> publishers) {
     public <V> void sendDelete(String bindingName, String dataSource, V data) {
         send(bindingName, dataSource, EventType.DELETE, data);
     }
+
+    /**
+     * 发送“刷新”类型事件（无业务 data，消费侧调用 {@link AbstractMessageStorage#load()}）。
+     *
+     * @param bindingName 消息绑定名称
+     * @param dataSource  数据源标识
+     */
+    public void sendRefresh(String bindingName, String dataSource) {
+        send(bindingName, dataSource, EventType.REFRESH, null);
+    }
 }
