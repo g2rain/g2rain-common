@@ -12,10 +12,11 @@ class EventTypeTest {
     @Test
     @DisplayName("测试事件类型枚举值")
     void testEventTypeValues() {
-        assertEquals(3, EventType.values().length);
+        assertEquals(4, EventType.values().length);
         assertNotNull(EventType.CREATE);
         assertNotNull(EventType.DELETE);
         assertNotNull(EventType.UPDATE);
+        assertNotNull(EventType.REFRESH);
     }
 
     @Test
@@ -24,5 +25,6 @@ class EventTypeTest {
         assertEquals(EventType.CREATE, EventType.valueOf("CREATE"));
         assertEquals(EventType.DELETE, EventType.valueOf("DELETE"));
         assertEquals(EventType.UPDATE, EventType.valueOf("UPDATE"));
+        assertEquals(EventType.REFRESH, EventType.valueOf("REFRESH"));
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -113,6 +114,16 @@ class MomentsTest {
         String nowStringCustom = Moments.nowString("yyyy-MM-dd");
         assertNotNull(nowStringCustom);
         assertTrue(nowStringCustom.matches("\\d{4}-\\d{2}-\\d{2}"));
+    }
+
+    @Test
+    @DisplayName("测试指定时区的当前时间")
+    void testNowWithZone() {
+        ZoneId shanghai = ZoneId.of("Asia/Shanghai");
+        assertNotNull(Moments.now(shanghai));
+        assertTrue(Moments.nowString(shanghai).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
+        assertNotNull(Moments.now(null));
+        assertTrue(Moments.nowString((ZoneId) null).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
     }
 
     @Test
