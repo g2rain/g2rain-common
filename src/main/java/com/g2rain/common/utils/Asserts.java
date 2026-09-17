@@ -2,6 +2,7 @@ package com.g2rain.common.utils;
 
 import com.g2rain.common.exception.BusinessException;
 import com.g2rain.common.exception.ErrorCode;
+import org.jetbrains.annotations.Contract;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -54,6 +55,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果对象为 {@code null}
      */
+    @Contract("null, _ -> fail")
     public static void notNull(Object obj, ErrorCode errorCode) {
         if (Objects.isNull(obj)) {
             throw new BusinessException(errorCode);
@@ -68,6 +70,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果对象为 {@code null}
      */
+    @Contract("null, _, _ -> fail")
     public static void notNull(Object obj, ErrorCode errorCode, Object... args) {
         if (Objects.isNull(obj)) {
             throw new BusinessException(errorCode, args);
@@ -82,6 +85,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果对象为 {@code null}
      */
+    @Contract("null, _, _ -> fail")
     public static void notNull(Object obj, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Objects.isNull(obj)) {
             throw new BusinessException(errorCode, keyArgs);
@@ -97,6 +101,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果条件为 {@code false}
      */
+    @Contract("false, _ -> fail")
     public static void isTrue(boolean condition, ErrorCode errorCode) {
         if (!condition) {
             throw new BusinessException(errorCode);
@@ -111,6 +116,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果条件为 {@code false}
      */
+    @Contract("false, _, _ -> fail")
     public static void isTrue(boolean condition, ErrorCode errorCode, Object... args) {
         if (!condition) {
             throw new BusinessException(errorCode, args);
@@ -125,6 +131,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果条件为 {@code false}
      */
+    @Contract("false, _, _ -> fail")
     public static void isTrue(boolean condition, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (!condition) {
             throw new BusinessException(errorCode, keyArgs);
@@ -140,6 +147,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果字符串为空
      */
+    @Contract("null, _ -> fail")
     public static void notEmpty(String str, ErrorCode errorCode) {
         if (Strings.isEmpty(str)) {
             throw new BusinessException(errorCode);
@@ -154,6 +162,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果字符串为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(String str, ErrorCode errorCode, Object... args) {
         if (Strings.isEmpty(str)) {
             throw new BusinessException(errorCode, args);
@@ -168,6 +177,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果字符串为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(String str, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Strings.isEmpty(str)) {
             throw new BusinessException(errorCode, keyArgs);
@@ -181,6 +191,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果字符串为空白
      */
+    @Contract("null, _ -> fail")
     public static void notBlank(String str, ErrorCode errorCode) {
         if (Strings.isBlank(str)) {
             throw new BusinessException(errorCode);
@@ -195,6 +206,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果字符串为空白
      */
+    @Contract("null, _, _ -> fail")
     public static void notBlank(String str, ErrorCode errorCode, Object... args) {
         if (Strings.isBlank(str)) {
             throw new BusinessException(errorCode, args);
@@ -209,6 +221,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果字符串为空白
      */
+    @Contract("null, _, _ -> fail")
     public static void notBlank(String str, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Strings.isBlank(str)) {
             throw new BusinessException(errorCode, keyArgs);
@@ -224,6 +237,7 @@ public final class Asserts {
      * @param errorCode  错误码
      * @throws BusinessException 如果集合为空
      */
+    @Contract("null, _ -> fail")
     public static void notEmpty(Collection<?> collection, ErrorCode errorCode) {
         if (Collections.isEmpty(collection)) {
             throw new BusinessException(errorCode);
@@ -238,6 +252,7 @@ public final class Asserts {
      * @param args       索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果集合为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Collection<?> collection, ErrorCode errorCode, Object... args) {
         if (Collections.isEmpty(collection)) {
             throw new BusinessException(errorCode, args);
@@ -252,6 +267,7 @@ public final class Asserts {
      * @param keyArgs    键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果集合为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Collection<?> collection, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Collections.isEmpty(collection)) {
             throw new BusinessException(errorCode, keyArgs);
@@ -265,6 +281,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果 Map 为空
      */
+    @Contract("null, _ -> fail")
     public static void notEmpty(Map<?, ?> map, ErrorCode errorCode) {
         if (Collections.isEmpty(map)) {
             throw new BusinessException(errorCode);
@@ -279,6 +296,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果 Map 为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Map<?, ?> map, ErrorCode errorCode, Object... args) {
         if (Collections.isEmpty(map)) {
             throw new BusinessException(errorCode, args);
@@ -293,6 +311,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果 Map 为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Map<?, ?> map, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Collections.isEmpty(map)) {
             throw new BusinessException(errorCode, keyArgs);
@@ -306,6 +325,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果数组为空
      */
+    @Contract("null, _ -> fail")
     public static void notEmpty(Object[] array, ErrorCode errorCode) {
         if (Collections.isEmpty(array)) {
             throw new BusinessException(errorCode);
@@ -320,6 +340,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果数组为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Object[] array, ErrorCode errorCode, Object... args) {
         if (Collections.isEmpty(array)) {
             throw new BusinessException(errorCode, args);
@@ -334,6 +355,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果数组为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Object[] array, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Collections.isEmpty(array)) {
             throw new BusinessException(errorCode, keyArgs);
@@ -347,6 +369,7 @@ public final class Asserts {
      * @param errorCode 错误码
      * @throws BusinessException 如果对象为空
      */
+    @Contract("null, _ -> fail")
     public static void notEmpty(Object obj, ErrorCode errorCode) {
         if (Collections.isEmpty(obj)) {
             throw new BusinessException(errorCode);
@@ -361,6 +384,7 @@ public final class Asserts {
      * @param args      索引参数数组，用于填充错误消息模板
      * @throws BusinessException 如果对象为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Object obj, ErrorCode errorCode, Object... args) {
         if (Collections.isEmpty(obj)) {
             throw new BusinessException(errorCode, args);
@@ -375,6 +399,7 @@ public final class Asserts {
      * @param keyArgs   键值对参数映射，用于填充错误消息模板
      * @throws BusinessException 如果对象为空
      */
+    @Contract("null, _, _ -> fail")
     public static void notEmpty(Object obj, ErrorCode errorCode, Map<String, Object> keyArgs) {
         if (Collections.isEmpty(obj)) {
             throw new BusinessException(errorCode, keyArgs);

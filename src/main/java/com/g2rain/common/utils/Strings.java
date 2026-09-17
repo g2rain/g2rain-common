@@ -1,6 +1,9 @@
 package com.g2rain.common.utils;
 
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -58,11 +61,24 @@ public class Strings {
     }
 
     /**
+     * 如果字符串为 {@code null} 或空白字符串，则返回默认值，否则返回原字符串。
+     *
+     * @param value        原字符串
+     * @param defaultValue 默认值
+     * @return 非空白字符串或默认值
+     */
+    public static String defaultIfBlank(String value, String defaultValue) {
+        Objects.requireNonNull(defaultValue, "defaultValue");
+        return isBlank(value) ? defaultValue : value;
+    }
+
+    /**
      * 判断字符串是否为 {@code null} 或仅包含空白字符。
      *
      * @param str 待判断字符串
      * @return {@code true} 表示为空白或 {@code null}，否则 {@code false}
      */
+    @Contract("null -> true")
     public static boolean isBlank(String str) {
         return Objects.isNull(str) || str.isBlank();
     }
@@ -83,6 +99,7 @@ public class Strings {
      * @param str 待判断字符序列
      * @return {@code true} 表示为空或 {@code null}，否则 {@code false}
      */
+    @Contract("null -> true")
     public static boolean isEmpty(CharSequence str) {
         return Objects.isNull(str) || str.isEmpty();
     }
@@ -108,6 +125,7 @@ public class Strings {
         if (Objects.isNull(str) || Objects.isNull(prefix)) {
             return false;
         }
+
         return str.startsWith(prefix);
     }
 
@@ -122,6 +140,7 @@ public class Strings {
         if (Objects.isNull(str) || Objects.isNull(suffix)) {
             return false;
         }
+
         return str.endsWith(suffix);
     }
 
@@ -157,9 +176,33 @@ public class Strings {
         if (Objects.isNull(str1) && Objects.isNull(str2)) {
             return true;
         }
+
         if (Objects.isNull(str1) || Objects.isNull(str2)) {
             return false;
         }
+
         return str1.equalsIgnoreCase(str2);
+    }
+
+    /**
+     * 判断字符串是否包含子串（{@code null} 安全）。
+     *
+     * @param str    原字符串
+     * @param search 子串
+     * @return {@code true} 表示 str 非 {@code null} 且含 search
+     */
+    @Contract("null, _ -> false; _, null -> false")
+    public static boolean contains(String str, String search) {
+        return Objects.nonNull(str) && Objects.nonNull(search) && str.contains(search);
+    }
+
+    /**
+     * 将空白字符串转换为 {@code null}，非空白字符串去除首尾空白。
+     *
+     * @param value 待处理的字符串
+     * @return {@code null} 或去除首尾空白后的字符串
+     */
+    public static @Nullable String blankToNull(@Nullable String value) {
+        return Strings.isBlank(value) ? null : value.trim();
     }
 }

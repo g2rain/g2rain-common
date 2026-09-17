@@ -1,6 +1,8 @@
 package com.g2rain.common.utils;
 
 
+import org.jetbrains.annotations.Contract;
+
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class Collections {
      * @param obj 待判断对象
      * @return 对象为空返回 {@code true}，否则 {@code false}
      */
+    @Contract("null -> true")
     public static boolean isEmpty(Object obj) {
         return switch (obj) {
             case null -> true;
