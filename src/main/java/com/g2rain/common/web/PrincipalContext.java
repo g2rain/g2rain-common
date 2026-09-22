@@ -4,6 +4,7 @@ package com.g2rain.common.web;
 import com.g2rain.common.enums.OrganType;
 import com.g2rain.common.enums.SessionType;
 import com.g2rain.common.utils.Strings;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,6 +45,13 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 public class PrincipalContext extends BasePrincipal {
+
+    /**
+     * 开发者自定义请求级扩展属性（仅进程内透传，不写入 Header）
+     */
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final Map<ContextKey<?>, Object> attributes = new HashMap<>();
 
     /**
      * 大模型密钥
@@ -105,6 +113,66 @@ public class PrincipalContext extends BasePrincipal {
      */
     public static PrincipalContext of() {
         return new PrincipalContext();
+    }
+
+    /**
+     * 放入自定义属性；{@code value == null} 时删除该 key。
+     * <p>仅进程内透传，不写入 Header。</p>
+     *
+     * @param key   类型安全的属性键
+     * @param value 属性值
+     * @param <T>   值类型
+     */
+    public <T> void putAttribute(ContextKey<T> key, T value) {
+        if (Objects.isNull(key)) {
+            return;
+        }
+
+        if (Objects.isNull(value)) {
+            removeAttribute(key);
+            return;
+        }
+
+        attributes.put(key, value);
+    }
+
+    /**
+     * 按 {@link ContextKey} 取出自定义属性；不存在或类型不匹配时返回 {@code null}
+     * （类型不匹配不抛错，避免误用搞挂请求）。
+     *
+     * @param key 类型安全的属性键
+     * @param <T> 值类型
+     * @return 属性值，或 {@code null}
+     */
+    public <T> T getAttribute(ContextKey<T> key) {
+        if (Objects.isNull(key)) {
+            return null;
+        }
+
+        Object value = attributes.get(key);
+        if (Objects.isNull(value)) {
+            return null;
+        }
+
+        Class<T> type = key.type();
+        if (!type.isInstance(value)) {
+            return null;
+        }
+
+        return type.cast(value);
+    }
+
+    /**
+     * 删除自定义属性。
+     *
+     * @param key 类型安全的属性键
+     */
+    public void removeAttribute(ContextKey<?> key) {
+        if (Objects.isNull(key)) {
+            return;
+        }
+
+        attributes.remove(key);
     }
 
     /**
