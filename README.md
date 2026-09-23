@@ -73,7 +73,7 @@ g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和�
 - 领域事件的发布、通道选择、消息分发与存储处理流程
 - DTO 创建/更新分组校验与字段错误聚合流程
 
-## 功能概览
+### 本地测试
 
 | 能力 | 说明 |
 | --- | --- |
@@ -103,29 +103,32 @@ g2rain 后端公共规范组件，沉淀统一响应与分页模型、异常和�
 
 ## 核心流程
 
-| 流程 | 关键步骤 | 代码线索 |
-| --- | --- | --- |
-| 异常到统一响应 | 业务代码使用 ErrorCode 定义错误 → 抛出 BusinessException 或收集 FieldError → ExceptionProcessor/ExceptionConverter 解析异常 → MessageResolver 处理消息参数 → 输出 Result.error | ErrorCode、BusinessException、DefaultExceptionProcessor、ExceptionConverter、MessageResolver、Result |
-| 主体上下文传播 | 适配层根据 PrincipalHeaders 构建 PrincipalContext → 通过 PrincipalContextHolder 绑定作用域 → 业务代码读取用户、组织、应用与链路字段 → 异步任务使用 wrap/runWith/callWith 传播上下文 → 作用域结束后自动释放 | PrincipalHeaders、PrincipalContext、PrincipalContextHolder、ScopedContextHolder |
-| 事件发布与分发 | 调用 EventPublisherHub 选择发布通道 → 封装 EventMessage 与 EventType → EventPublisher 发送消息 → MessageDispatcher 解析并路由消息 → 匹配的 AbstractMessageStorage 处理变更 | EventPublisherHub、EventMessage、EventPublisher、DefaultMessageDispatcher、MessageStorageRegistry |
-| DTO 分组校验 | 根据 BaseDto.id 判断创建或更新 → 执行 CreateGroup/UpdateGroup 约束 → 补充 Default 组校验 → 将 ConstraintViolation 转换为 FieldError → 存在错误时抛出 BusinessException | Validations、BaseDto、CreateGroup、UpdateGroup、FieldError、SystemErrorCode |
+### 发布说明
 
-## 流程图
+- 正式版通过 Git Tag 触发 `release.yml`
+- `develop` 分支上的 `-SNAPSHOT` 版本可通过 `snapshot.yml` 发布
+- Release 流程包含源码包、Javadoc 包和 GPG 签名
 
-```mermaid
-flowchart TD
-  A[业务或平台服务] --> B[调用公共 API]
-  B --> C{能力入口}
-  C --> D[Result/分页模型]
-  C --> E[异常与校验]
-  C --> F[主体/JWT 上下文]
-  C --> G[JSON 编解码]
-  C --> H[事件同步]
-  D --> I[一致的服务契约]
-  E --> I
-  F --> I
-  G --> I
-  H --> I
+## 7. 项目结构
+
+```text
+g2rain-common/
+├── .github/workflows/
+│   ├── release.yml
+│   └── snapshot.yml
+├── src/main/java/com/g2rain/common/
+│   ├── converter
+│   ├── enums
+│   ├── exception
+│   ├── id
+│   ├── json
+│   ├── model
+│   ├── syncer
+│   ├── utils
+│   ├── validation
+│   └── web
+├── src/test/java/com/g2rain/common/
+└── pom.xml
 ```
 
 ## 技术栈
@@ -133,7 +136,6 @@ flowchart TD
 | 类别 | 说明 |
 | --- | --- |
 | 运行时 | Java 25 |
-| 公共 API 依赖 | Jackson Databind、MapStruct、Jakarta Validation、Swagger Annotations |
 | 其他 | Lombok |
 
 ## 环境要求
