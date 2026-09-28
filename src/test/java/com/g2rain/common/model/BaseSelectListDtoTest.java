@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +25,7 @@ class BaseSelectListDtoTest {
         assertNull(dto.getIds());
         assertNull(dto.getUpdateTime());
         assertNull(dto.getCreateTime());
+        assertTrue(dto.isDefaultIdDescSortEnabled());
 
         // 测试设置和获取属性
         dto.setId(1L);
@@ -58,5 +60,49 @@ class BaseSelectListDtoTest {
         assertEquals(3, dto.getIds().size());
         assertTrue(dto.getIds().contains(2L));
         assertTrue(dto.getIds().contains(3L));
+    }
+
+    @Test
+    @DisplayName("sorts 为空且开关开启时默认按 id 降序")
+    void testGetSafeSortsDefaultWhenEmpty() {
+        BaseSelectListDto dto = new BaseSelectListDto();
+
+        List<SortItem> nullSorts = dto.getSafeSorts();
+        assertEquals(1, nullSorts.size());
+        assertEquals("id", nullSorts.getFirst().getColumn());
+        assertEquals(SortItem.Direction.DESC.name(), nullSorts.getFirst().getDirection());
+
+        dto.setSorts(List.of());
+        List<SortItem> emptySorts = dto.getSafeSorts();
+        assertEquals(1, emptySorts.size());
+        assertEquals("id", emptySorts.getFirst().getColumn());
+        assertEquals(SortItem.Direction.DESC.name(), emptySorts.getFirst().getDirection());
+    }
+
+    @Test
+    @DisplayName("sorts 为空且开关关闭时不返回默认排序")
+    void testGetSafeSortsEmptyWhenDefaultDisabled() {
+        BaseSelectListDto dto = new BaseSelectListDto();
+        dto.setDefaultIdDescSortEnabled(false);
+
+        assertFalse(dto.isDefaultIdDescSortEnabled());
+        assertTrue(dto.getSafeSorts().isEmpty());
+
+        dto.setSorts(List.of());
+        assertTrue(dto.getSafeSorts().isEmpty());
+    }
+
+    @Test
+    @DisplayName("sorts 有值时按传入内容解析")
+    void testGetSafeSortsParsesInput() {
+        BaseSelectListDto dto = new BaseSelectListDto();
+        dto.setSorts(List.of("createTime,asc", "id,desc"));
+
+        List<SortItem> sorts = dto.getSafeSorts();
+        assertEquals(2, sorts.size());
+        assertEquals("createTime", sorts.getFirst().getColumn());
+        assertEquals(SortItem.Direction.ASC.name(), sorts.getFirst().getDirection());
+        assertEquals("id", sorts.get(1).getColumn());
+        assertEquals(SortItem.Direction.DESC.name(), sorts.get(1).getDirection());
     }
 }
