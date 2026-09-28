@@ -59,4 +59,35 @@ class BaseSelectListDtoTest {
         assertTrue(dto.getIds().contains(2L));
         assertTrue(dto.getIds().contains(3L));
     }
+
+    @Test
+    @DisplayName("sorts 为空时默认按 id 降序")
+    void testGetSafeSortsDefaultWhenEmpty() {
+        BaseSelectListDto dto = new BaseSelectListDto();
+
+        List<SortItem> nullSorts = dto.getSafeSorts();
+        assertEquals(1, nullSorts.size());
+        assertEquals("id", nullSorts.getFirst().getColumn());
+        assertEquals(SortItem.Direction.DESC.name(), nullSorts.getFirst().getDirection());
+
+        dto.setSorts(List.of());
+        List<SortItem> emptySorts = dto.getSafeSorts();
+        assertEquals(1, emptySorts.size());
+        assertEquals("id", emptySorts.getFirst().getColumn());
+        assertEquals(SortItem.Direction.DESC.name(), emptySorts.getFirst().getDirection());
+    }
+
+    @Test
+    @DisplayName("sorts 有值时按传入内容解析")
+    void testGetSafeSortsParsesInput() {
+        BaseSelectListDto dto = new BaseSelectListDto();
+        dto.setSorts(List.of("createTime,asc", "id,desc"));
+
+        List<SortItem> sorts = dto.getSafeSorts();
+        assertEquals(2, sorts.size());
+        assertEquals("createTime", sorts.getFirst().getColumn());
+        assertEquals(SortItem.Direction.ASC.name(), sorts.getFirst().getDirection());
+        assertEquals("id", sorts.get(1).getColumn());
+        assertEquals(SortItem.Direction.DESC.name(), sorts.get(1).getDirection());
+    }
 }

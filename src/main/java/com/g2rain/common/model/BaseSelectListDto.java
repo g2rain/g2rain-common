@@ -125,12 +125,12 @@ public class BaseSelectListDto {
      * <p>
      * 返回的列表只包含 column 非空的排序项, direction 不合法自动转为 ASC
      *
-     * @return 解析后的安全排序列表, 如果前端未传或列表为空, 则返回空列表
+     * @return 解析后的安全排序列表；如果前端未传或列表为空, 则返回默认排序 {@code id DESC}
      */
     public List<SortItem> getSafeSorts() {
-        // 如果前端未传或者列表为空, 直接返回不可变空列表
+        // 如果前端未传或者列表为空, 返回默认按主键降序
         if (Collections.isEmpty(this.sorts)) {
-            return List.of();
+            return List.of(new SortItem("id", SortItem.Direction.DESC.name()));
         }
 
         // 初始化结果列表, 容量与前端传入列表一致, 避免多次扩容
