@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +25,7 @@ class BaseSelectListDtoTest {
         assertNull(dto.getIds());
         assertNull(dto.getUpdateTime());
         assertNull(dto.getCreateTime());
+        assertTrue(dto.isDefaultIdDescSortEnabled());
 
         // 测试设置和获取属性
         dto.setId(1L);
@@ -61,7 +63,7 @@ class BaseSelectListDtoTest {
     }
 
     @Test
-    @DisplayName("sorts 为空时默认按 id 降序")
+    @DisplayName("sorts 为空且开关开启时默认按 id 降序")
     void testGetSafeSortsDefaultWhenEmpty() {
         BaseSelectListDto dto = new BaseSelectListDto();
 
@@ -75,6 +77,19 @@ class BaseSelectListDtoTest {
         assertEquals(1, emptySorts.size());
         assertEquals("id", emptySorts.getFirst().getColumn());
         assertEquals(SortItem.Direction.DESC.name(), emptySorts.getFirst().getDirection());
+    }
+
+    @Test
+    @DisplayName("sorts 为空且开关关闭时不返回默认排序")
+    void testGetSafeSortsEmptyWhenDefaultDisabled() {
+        BaseSelectListDto dto = new BaseSelectListDto();
+        dto.setDefaultIdDescSortEnabled(false);
+
+        assertFalse(dto.isDefaultIdDescSortEnabled());
+        assertTrue(dto.getSafeSorts().isEmpty());
+
+        dto.setSorts(List.of());
+        assertTrue(dto.getSafeSorts().isEmpty());
     }
 
     @Test

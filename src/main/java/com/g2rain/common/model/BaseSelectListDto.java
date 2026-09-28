@@ -115,6 +115,16 @@ public class BaseSelectListDto {
     private List<String> sorts;
 
     /**
+     * 是否在 sorts 为空时应用默认排序 {@code id DESC}
+     * <p>
+     * 默认开启；仅当设为 {@code false} 时, sorts 为空返回空列表而不追加默认排序
+     */
+    @Setter
+    @Getter
+    @Schema(description = "是否启用默认 id DESC 排序, 默认 true", defaultValue = "true")
+    private boolean defaultIdDescSortEnabled = true;
+
+    /**
      * 内部使用：将前端传入的排序字符串列表解析为 SortItem 列表
      * <p>
      * 前端传入 sorts, 每个元素格式为 "column,direction", 例如：
@@ -125,12 +135,17 @@ public class BaseSelectListDto {
      * <p>
      * 返回的列表只包含 column 非空的排序项, direction 不合法自动转为 ASC
      *
-     * @return 解析后的安全排序列表；如果前端未传或列表为空, 则返回默认排序 {@code id DESC}
+     * @return 解析后的安全排序列表；如果前端未传或列表为空且 {@link #defaultIdDescSortEnabled} 为 true,
+     *         则返回默认排序 {@code id DESC}；开关为 false 时返回空列表
      */
     public List<SortItem> getSafeSorts() {
-        // 如果前端未传或者列表为空, 返回默认按主键降序
+        // 如果前端未传或者列表为空
         if (Collections.isEmpty(this.sorts)) {
-            return List.of(new SortItem("id", SortItem.Direction.DESC.name()));
+            // 默认开关开启时返回 id DESC；关闭时返回空列表
+            if (this.defaultIdDescSortEnabled) {
+                return List.of(new SortItem("id", SortItem.Direction.DESC.name()));
+            }
+            return List.of();
         }
 
         // 初始化结果列表, 容量与前端传入列表一致, 避免多次扩容
