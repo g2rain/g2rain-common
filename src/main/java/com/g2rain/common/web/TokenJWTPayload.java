@@ -20,6 +20,7 @@ import java.util.List;
  *     <li>{@link #clientPublicKey}：客户端 DPoP 公钥，用于绑定 Token 和客户端</li>
  *     <li>{@link #applicationScopes}：应用作用域集合，用于鉴权判断请求所属应用权限</li>
  *     <li>{@link #roleIds}：角色 ID 集合</li>
+ *     <li>{@link #entryId}：匿名接入码 ID，仅 {@code ANONYMOUS} 会话携带</li>
  * </ul>
  *
  * <p><b>使用示例：</b></p>
@@ -81,4 +82,10 @@ public class TokenJWTPayload extends BasePrincipal {
      * 角色 ID 集合
      */
     private List<Long> roleIds;
+
+    /**
+     * 匿名接入码 ID
+     * <p>仅 {@code ANONYMOUS} 会话携带，网关据此校验接入码是否仍启用。</p>
+     */
+    private Long entryId;
 }
