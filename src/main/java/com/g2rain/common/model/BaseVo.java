@@ -21,14 +21,14 @@ public class BaseVo {
     /**
      * 更新时间（出参格式：yyyy-MM-dd HH:mm:ss）
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(description = "更新时间(出参格式:yyyy-MM-dd HH:mm:ss)", example = "2026-01-07 12:00:00")
     private String updateTime;
 
     /**
      * 创建时间（出参格式：yyyy-MM-dd HH:mm:ss）
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(description = "创建时间(出参格式:yyyy-MM-dd HH:mm:ss)", example = "2026-01-07 12:00:00")
     private String createTime;
 
