@@ -6,7 +6,7 @@
 
     <groupId>com.g2rain</groupId>
     <artifactId>g2rain-common</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <packaging>jar</packaging>
 
     <name>G2rain Common</name>
@@ -65,7 +65,7 @@
     </distributionManagement>
 
     <properties>
-        <jackson.databind.version>3.2.3</jackson.databind.version>
+        <jackson.databind.version>3.2.4</jackson.databind.version>
         <junit.jupiter.version>6.1.3</junit.jupiter.version>
         <mockito.core.version>5.24.0</mockito.core.version>
         <lombok.version>1.18.48</lombok.version>
