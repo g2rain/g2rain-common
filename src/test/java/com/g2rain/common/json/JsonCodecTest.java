@@ -8,6 +8,7 @@ import tools.jackson.databind.json.JsonMapper;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -152,6 +153,58 @@ class JsonCodecTest {
         assertEquals(0, jsonCodec.asInt(null));
         assertEquals(0.0, jsonCodec.asDouble(null));
         assertEquals(0L, jsonCodec.asLong(null));
+    }
+
+    @Test
+    @DisplayName("测试对象转换")
+    void testConvert() {
+        // 测试null值与空白字符串
+        assertNull(jsonCodec.convert(null, TestData.class));
+        assertNull(jsonCodec.convert("  ", TestData.class));
+
+        // 测试字符串按 JSON 文本解析
+        TestData fromText = jsonCodec.convert("{\"name\":\"test\",\"value\":123}", TestData.class);
+        assertEquals("test", fromText.getName());
+        assertEquals(123, fromText.getValue());
+
+        // 测试 Map 转对象
+        TestData fromMap = jsonCodec.convert(java.util.Map.of("name", "test", "value", 123), TestData.class);
+        assertEquals("test", fromMap.getName());
+        assertEquals(123, fromMap.getValue());
+
+        // 测试 JsonNode 转对象
+        TestData fromNode = jsonCodec.convert(jsonCodec.str2node("{\"name\":\"test\",\"value\":123}"), TestData.class);
+        assertEquals("test", fromNode.getName());
+        assertEquals(123, fromNode.getValue());
+
+        // 测试泛型类型
+        java.util.List<TestData> list = jsonCodec.convert(
+            java.util.List.of(java.util.Map.of("name", "a", "value", 1)),
+            new tools.jackson.core.type.TypeReference<>() {
+            });
+        assertEquals(1, list.size());
+        assertEquals("a", list.getFirst().getName());
+    }
+
+    @Test
+    @DisplayName("测试含原始数字节点的对象转换")
+    void testConvertRawNumber() {
+        JsonCodec codec = JsonCodecBuilder.builder()
+            .withConfig(builder -> builder.addModule(new NestedJsonStringModule()))
+            .withDefaults().build();
+        tools.jackson.databind.JsonNode node = codec.str2obj("{\"name\":\"test\",\"value\":45360}", tools.jackson.databind.JsonNode.class);
+
+        TestData data = codec.convert(node, TestData.class);
+        assertEquals(45360, data.getValue());
+
+        Object plain = codec.convert(node, Object.class);
+        assertInstanceOf(java.util.Map.class, plain);
+        assertEquals(45360, ((Number) ((java.util.Map<?, ?>) plain).get("value")).intValue());
+
+        java.util.Map<String, Object> wrapped = new java.util.HashMap<>();
+        wrapped.put("name", "test");
+        wrapped.put("value", node.get("value"));
+        assertEquals(45360, codec.convert(wrapped, TestData.class).getValue());
     }
 
     // 测试用的内部类

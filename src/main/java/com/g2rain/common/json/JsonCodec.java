@@ -154,6 +154,70 @@ public class JsonCodec {
     }
 
     /**
+     * 将对象转换为指定类型，效果等同 {@code str2obj(obj2str(obj), type)}，但不经字符串往返。
+     * <ul>
+     *     <li>{@code String}：视为 JSON 文本解析（与 {@link #obj2str(Object)} 对字符串原样返回的约定一致）；</li>
+     *     <li>{@link JsonNode}：按树读取（{@code treeToValue}）；</li>
+     *     <li>其他对象：{@code convertValue}。</li>
+     * </ul>
+     * <p><b>使用示例：</b></p>
+     * <pre>{@code
+     * Order order = codec.convert(Map.of("id", 1), Order.class);
+     * Object plain = codec.convert(codec.str2node("{\"id\":45360}"), Object.class); // {id=45360}
+     * }</pre>
+     *
+     * @param obj  待转换对象
+     * @param type 目标类型
+     * @param <T>  目标类型
+     * @return 转换结果；{@code obj} 为 {@code null} 或空白字符串时返回 {@code null}
+     * @throws BusinessException 转换失败时抛出
+     */
+    public <T> T convert(Object obj, Class<T> type) {
+        if (Objects.isNull(obj)) {
+            return null;
+        }
+
+        if (obj instanceof String str) {
+            return Strings.isBlank(str) ? null : jsonMapper.readValue(str, type);
+        }
+
+        if (obj instanceof JsonNode node) {
+            return jsonMapper.treeToValue(node, type);
+        }
+
+        return jsonMapper.convertValue(obj, type);
+    }
+
+    /**
+     * 将对象转换为指定泛型类型，规则同 {@link #convert(Object, Class)}。
+     * <p><b>使用示例：</b></p>
+     * <pre>{@code
+     * List<Order> orders = codec.convert(rows, new TypeReference<List<Order>>() {});
+     * }</pre>
+     *
+     * @param obj     待转换对象
+     * @param typeRef 目标类型（如 {@code new TypeReference<List<Order>>() {}}）
+     * @param <T>     目标类型
+     * @return 转换结果；{@code obj} 为 {@code null} 或空白字符串时返回 {@code null}
+     * @throws BusinessException 转换失败时抛出
+     */
+    public <T> T convert(Object obj, TypeReference<T> typeRef) {
+        if (Objects.isNull(obj)) {
+            return null;
+        }
+
+        if (obj instanceof String str) {
+            return Strings.isBlank(str) ? null : jsonMapper.readValue(str, typeRef);
+        }
+
+        if (obj instanceof JsonNode node) {
+            return jsonMapper.treeToValue(node, typeRef);
+        }
+
+        return jsonMapper.convertValue(obj, typeRef);
+    }
+
+    /**
      * 将 JSON 字符串反序列化为对象。
      *
      * @param str      JSON 字符串
