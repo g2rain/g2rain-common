@@ -11,6 +11,7 @@ import tools.jackson.databind.node.DecimalNode;
 import tools.jackson.databind.node.IntNode;
 import tools.jackson.databind.node.LongNode;
 import tools.jackson.databind.node.NumericNode;
+import tools.jackson.databind.node.TreeBuildingGenerator;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -126,13 +127,19 @@ public class RawNumberNode extends NumericNode {
     }
 
     /**
-     * 以原文输出数字（不加引号）。
+     * 序列化：构建 JSON 树（如 {@code valueToTree}）时原样放入本节点；其余生成器以原文输出数字（不加引号）。
+     * <p>树构建生成器不支持 {@code writeNumber(String)}，须按节点写入。</p>
      *
      * @param g   JSON 生成器
      * @param ctx 序列化上下文
      */
     @Override
     public void serialize(JsonGenerator g, SerializationContext ctx) {
+        if (g instanceof TreeBuildingGenerator) {
+            g.writeTree(this);
+            return;
+        }
+
         g.writeNumber(this.rawValue);
     }
 

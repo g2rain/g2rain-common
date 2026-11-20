@@ -117,4 +117,15 @@ class RawNumberNodeTest {
         assertEquals(45360, ((Number) map.get("id")).intValue());
         assertEquals(0, new java.math.BigDecimal("1.50").compareTo(new java.math.BigDecimal(map.get("price").toString())));
     }
+
+    @Test
+    @DisplayName("测试对象转 JSON 树时保留原始数字节点")
+    void testValueToTree() {
+        JsonCodec codec = JsonCodecFactory.instance();
+        java.util.Map<String, Object> holder = java.util.Map.of("args", new RawNumberNode("45360"));
+
+        tools.jackson.databind.JsonNode tree = codec.obj2node(holder);
+        assertInstanceOf(RawNumberNode.class, tree.get("args"));
+        assertEquals("{\"args\":45360}", codec.obj2str(tree));
+    }
 }
