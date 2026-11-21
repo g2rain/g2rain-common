@@ -159,7 +159,12 @@ public enum SystemErrorCode implements ErrorCode {
     /**
      * 数据不存在
      */
-    DATA_NOT_EXISTS("system.50013", "数据不存在");
+    DATA_NOT_EXISTS("system.50013", "数据不存在"),
+
+    /**
+     * 数据不符合数据库约束（非空、长度、外键等）
+     */
+    DATA_CONSTRAINT_VIOLATED("system.50014", "数据不符合约束，未能保存");
 
     private final String code;
 
