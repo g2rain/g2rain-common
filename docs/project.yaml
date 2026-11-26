@@ -3,7 +3,7 @@ name: g2rain-common
 family: java-common-library
 role: G2rain 跨服务公共 Java 契约与基础能力库
 coordinates: com.g2rain:g2rain-common
-version: 1.0.7
+version: 1.0.10
 packaging: jar
 license: Apache-2.0
 

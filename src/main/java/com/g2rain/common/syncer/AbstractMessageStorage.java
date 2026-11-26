@@ -85,6 +85,15 @@ public abstract class AbstractMessageStorage<K, V, T> {
     protected abstract @NonNull Class<V> getValueType();
 
     /**
+     * 判断该存储是否接收指定消息。
+     * @param value 值对象，不能为 {@code null}
+     * @return 是否接收消息
+     */
+    protected boolean accepts(@NonNull V value) {
+        return true;
+    }
+
+    /**
      * 从值对象中获取对应的键。
      *
      * @param value 值对象，不能为 {@code null}

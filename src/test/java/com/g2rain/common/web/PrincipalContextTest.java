@@ -61,6 +61,32 @@ class PrincipalContextTest {
     }
 
     @Test
+    @DisplayName("测试访客 ID 请求头读写与透传")
+    void testVisitorIdHeaderAndPropagation() {
+        PrincipalContext context = PrincipalContext.of();
+        context.setValue(PrincipalHeaders.VISITOR_ID, "20002");
+        assertEquals(20002L, context.getVisitorId());
+        assertEquals("20002", context.getValue(PrincipalHeaders.VISITOR_ID));
+        assertEquals(
+            "20002",
+            context.getHeaders().get(PrincipalHeaders.VISITOR_ID.getUpper()).iterator().next()
+        );
+
+        context.setValue(PrincipalHeaders.VISITOR_ID, null);
+        assertNull(context.getVisitorId());
+        assertFalse(context.getHeaders().containsKey(PrincipalHeaders.VISITOR_ID.getUpper()));
+    }
+
+    @Test
+    @DisplayName("测试 holder 读取访客 ID")
+    void testVisitorIdHolder() {
+        PrincipalContext context = PrincipalContext.of();
+        context.setVisitorId(20002L);
+        PrincipalContextHolder.runWith(context, () -> assertEquals(20002L, PrincipalContextHolder.getVisitorId()));
+        assertNull(PrincipalContextHolder.getVisitorId());
+    }
+
+    @Test
     @DisplayName("测试设置组织类型")
     void testSetOrganType() {
         PrincipalContext context = PrincipalContext.of();

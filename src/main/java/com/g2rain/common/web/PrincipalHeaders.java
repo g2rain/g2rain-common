@@ -66,6 +66,11 @@ public enum PrincipalHeaders {
     MEMBER_ID("X-MEMBER-ID", "x-member-id"),
 
     /**
+     * 当前客户端密钥对应的同机构访客标识
+     */
+    VISITOR_ID("X-VISITOR-ID", "x-visitor-id"),
+
+    /**
      * 真实姓名，用户真实姓名，用于展示或身份确认
      */
     NAME("X-NAME", "x-name"),

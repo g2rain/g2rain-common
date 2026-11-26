@@ -1,5 +1,7 @@
 package com.g2rain.common.web;
 
+import com.g2rain.common.json.JsonCodec;
+import com.g2rain.common.json.JsonCodecFactory;
 import com.g2rain.common.enums.OrganType;
 import com.g2rain.common.enums.SessionType;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,7 @@ class TokenJWTPayloadTest {
         assertNull(payload.getPassportId());
         assertNull(payload.getUserId());
         assertNull(payload.getMemberId());
+        assertNull(payload.getVisitorId());
         assertNull(payload.getName());
         assertFalse(payload.isAdminUser());
         assertNull(payload.getOrganType());
@@ -96,5 +99,18 @@ class TokenJWTPayloadTest {
         assertEquals(1234567890L + 86400L, payload.getRefreshExpireAt());
         assertEquals("key123", payload.getClientId());
         assertEquals(List.of(1L, 2L), payload.getRoleIds());
+    }
+
+    @Test
+    @DisplayName("Token JSON 序列化和反序列化包含 visitorId")
+    void testVisitorIdSerialization() {
+        TokenJWTPayload payload = new TokenJWTPayload();
+        payload.setVisitorId(20002L);
+        JsonCodec codec = JsonCodecFactory.instance();
+
+        String json = codec.obj2str(payload);
+        assertTrue(json.contains("\"visitorId\":20002"));
+        TokenJWTPayload restored = codec.str2obj(json, TokenJWTPayload.class);
+        assertEquals(20002L, restored.getVisitorId());
     }
 }

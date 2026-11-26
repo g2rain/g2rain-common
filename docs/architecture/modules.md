@@ -7,7 +7,7 @@
 | `json` | Jackson 3 编解码、精度保留和条件字段输出 | `JsonCodec`、`RawNumberNode`、`ConditionalJsonIgnore` |
 | `validation` | Create/Update 分组与校验入口 | `CreateGroup`、`UpdateGroup`、`Validations` |
 | `enums` | 跨服务共享的机构与会话枚举 | `OrganType`、`SessionType`（含 `MEMBER`） |
-| `web` | Principal、请求头、JWT/DPoP 数据和 ScopedValue 上下文 | `PrincipalContext`、`PrincipalHeaders`（含 `MEMBER_ID`）、`TokenJWTPayload`、`ScopedContextHolder` |
+| `web` | Principal、请求头、JWT/DPoP 数据和 ScopedValue 上下文 | `PrincipalContext`、`PrincipalHeaders`（含 `MEMBER_ID`、`VISITOR_ID`）、`TokenJWTPayload`、`ScopedContextHolder` |
 | `syncer` | 事件消息、发布、分发与存储扩展抽象 | `EventMessage`、`EventPublisherHub`、`MessageDispatcher` |
 | `id` | ID 生成 SPI | `IdGenerator` |
 | `utils` | 字符串、时间、数值、集合、断言与媒体类型 | `Strings`、`Moments`、`Decimals`、`Asserts` |

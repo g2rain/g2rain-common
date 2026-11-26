@@ -61,6 +61,12 @@ public class BasePrincipal {
     protected Long memberId;
 
     /**
+     * 当前客户端密钥对应的同机构访客 ID。
+     * <p>员工或会员会话由 IAM 签发时写入；{@code ANONYMOUS} 会话不携带此字段，其 {@link #userId} 即访客 ID。</p>
+     */
+    protected Long visitorId;
+
+    /**
      * 真实姓名
      * <p>用于展示或身份确认。</p>
      */

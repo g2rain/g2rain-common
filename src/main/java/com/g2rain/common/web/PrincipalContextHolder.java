@@ -372,6 +372,36 @@ public final class PrincipalContextHolder {
     }
 
     /**
+     * 获取 visitorId。
+     *
+     * @return 当前客户端密钥对应的访客 ID；上下文不存在时返回 {@code null}
+     * @since 2026/11/26
+     */
+    public static Long getVisitorId() {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return null;
+        }
+
+        return principalContext.getVisitorId();
+    }
+
+    /**
+     * 设置 visitorId。
+     *
+     * @param visitorId 当前客户端密钥对应的访客 ID
+     * @since 2026/11/26
+     */
+    public static void setVisitorId(Long visitorId) {
+        PrincipalContext principalContext = get();
+        if (Objects.isNull(principalContext)) {
+            return;
+        }
+
+        principalContext.setVisitorId(visitorId);
+    }
+
+    /**
      * 设置 memberId
      */
     public static void setMemberId(Long memberId) {

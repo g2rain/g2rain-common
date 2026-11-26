@@ -202,6 +202,7 @@ public class PrincipalContext extends BasePrincipal {
             case PASSPORT_ID -> toStrOrNull(this.passportId);
             case USER_ID -> toStrOrNull(this.userId);
             case MEMBER_ID -> toStrOrNull(this.memberId);
+            case VISITOR_ID -> toStrOrNull(this.visitorId);
             case NAME -> this.name;
             case ADMIN_USER -> String.valueOf(this.adminUser);
             case ORGAN_ID -> toStrOrNull(this.organId);
@@ -239,6 +240,7 @@ public class PrincipalContext extends BasePrincipal {
             case PASSPORT_ID -> this.passportId = parseLongOrNull(value);
             case USER_ID -> this.userId = parseLongOrNull(value);
             case MEMBER_ID -> this.memberId = parseLongOrNull(value);
+            case VISITOR_ID -> this.visitorId = parseLongOrNull(value);
             case NAME -> this.name = safeDecode(value);
             case ADMIN_USER -> this.adminUser = Boolean.parseBoolean(value);
             case ORGAN_TYPE -> this.organType = OrganType.safeOf(value);
@@ -291,6 +293,10 @@ public class PrincipalContext extends BasePrincipal {
 
         if (Objects.nonNull(this.memberId)) {
             headers.put(PrincipalHeaders.MEMBER_ID.getUpper(), List.of(String.valueOf(this.memberId)));
+        }
+
+        if (Objects.nonNull(this.visitorId)) {
+            headers.put(PrincipalHeaders.VISITOR_ID.getUpper(), List.of(String.valueOf(this.visitorId)));
         }
 
         if (Strings.isNotBlank(this.name)) {

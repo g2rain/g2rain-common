@@ -103,6 +103,10 @@ public class DefaultMessageDispatcher implements MessageDispatcher {
                 return;
             }
 
+            if (!ms.accepts(data)) {
+                return;
+            }
+
             // 获取数据的键
             K key = ms.getKey(data);
             switch (eventType) {

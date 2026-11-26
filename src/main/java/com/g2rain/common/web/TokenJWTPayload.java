@@ -21,6 +21,7 @@ import java.util.List;
  *     <li>{@link #applicationScopes}：应用作用域集合，用于鉴权判断请求所属应用权限</li>
  *     <li>{@link #roleIds}：角色 ID 集合</li>
  *     <li>{@link #entryId}：匿名接入码 ID，仅 {@code ANONYMOUS} 会话携带</li>
+ *     <li>{@link #visitorId}：当前客户端密钥对应的同机构访客 ID，仅员工或会员会话携带</li>
  * </ul>
  *
  * <p><b>使用示例：</b></p>

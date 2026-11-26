@@ -6,7 +6,7 @@
 
 - 类型：G2rain 公共 Java 库（Supporting Library）
 - Maven 坐标：`com.g2rain:g2rain-common`
-- 当前版本：`1.0.7`
+- 当前版本：`1.0.10`
 - Java 基线：25
 - 架构基线：项目本地 `java-common-library 1.0.0-local`
 - 中央 Profile：尚未发布适用的 `java-library` Profile，不得套用 `java-domain-service`
